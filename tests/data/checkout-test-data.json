@@ -1,0 +1,278 @@
+{
+  "credentials": {
+    "standardUser": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "lockedOutUser": {
+      "username": "locked_out_user",
+      "password": "secret_sauce"
+    },
+    "problemUser": {
+      "username": "problem_user",
+      "password": "secret_sauce"
+    },
+    "performanceGlitchUser": {
+      "username": "performance_glitch_user",
+      "password": "secret_sauce"
+    }
+  },
+  "products": {
+    "backpack": {
+      "name": "Sauce Labs Backpack",
+      "addToCartSelector": "[data-test='add-to-cart-sauce-labs-backpack']",
+      "removeSelector": "[data-test='remove-sauce-labs-backpack']",
+      "price": 29.99,
+      "priceDisplay": "$29.99"
+    },
+    "bikeLight": {
+      "name": "Sauce Labs Bike Light",
+      "addToCartSelector": "[data-test='add-to-cart-sauce-labs-bike-light']",
+      "removeSelector": "[data-test='remove-sauce-labs-bike-light']",
+      "price": 9.99,
+      "priceDisplay": "$9.99"
+    },
+    "boltTShirt": {
+      "name": "Sauce Labs Bolt T-Shirt",
+      "addToCartSelector": "[data-test='add-to-cart-sauce-labs-bolt-t-shirt']",
+      "removeSelector": "[data-test='remove-sauce-labs-bolt-t-shirt']",
+      "price": 15.99,
+      "priceDisplay": "$15.99"
+    },
+    "fleeceJacket": {
+      "name": "Sauce Labs Fleece Jacket",
+      "addToCartSelector": "[data-test='add-to-cart-sauce-labs-fleece-jacket']",
+      "removeSelector": "[data-test='remove-sauce-labs-fleece-jacket']",
+      "price": 49.99,
+      "priceDisplay": "$49.99"
+    },
+    "onesie": {
+      "name": "Sauce Labs Onesie",
+      "addToCartSelector": "[data-test='add-to-cart-sauce-labs-onesie']",
+      "removeSelector": "[data-test='remove-sauce-labs-onesie']",
+      "price": 7.99,
+      "priceDisplay": "$7.99"
+    },
+    "redTShirt": {
+      "name": "Test.allTheThings() T-Shirt (Red)",
+      "addToCartSelector": "[data-test='add-to-cart-test.allthethings()-t-shirt-(red)']",
+      "removeSelector": "[data-test='remove-test.allthethings()-t-shirt-(red)']",
+      "price": 15.99,
+      "priceDisplay": "$15.99"
+    }
+  },
+  "happyPath": {
+    "_description": "Complete checkout flow with 2 items (Backpack + Bike Light)",
+    "products": ["backpack", "bikeLight"],
+    "customer": {
+      "firstName": "John",
+      "lastName": "Smith",
+      "postalCode": "10001"
+    },
+    "expectedSummary": {
+      "itemTotal": "$39.98",
+      "tax": "$3.20",
+      "total": "$43.18",
+      "payment": "SauceCard #31337",
+      "shipping": "Free Pony Express Delivery!"
+    },
+    "expectedConfirmation": {
+      "heading": "Thank you for your order!",
+      "subtext": "Your order has been dispatched, and will arrive just as fast as the pony can get there!"
+    }
+  },
+  "negativeAllEmpty": {
+    "_description": "Submit checkout form with all fields empty",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "",
+      "lastName": "",
+      "postalCode": ""
+    },
+    "expectedError": "Error: First Name is required"
+  },
+  "negativeFirstNameEmpty": {
+    "_description": "Submit checkout form with First Name empty",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "",
+      "lastName": "Smith",
+      "postalCode": "10001"
+    },
+    "expectedError": "Error: First Name is required"
+  },
+  "negativeLastNameEmpty": {
+    "_description": "Submit checkout form with Last Name empty",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "John",
+      "lastName": "",
+      "postalCode": "10001"
+    },
+    "expectedError": "Error: Last Name is required"
+  },
+  "negativeZipEmpty": {
+    "_description": "Submit checkout form with Postal Code empty",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "John",
+      "lastName": "Smith",
+      "postalCode": ""
+    },
+    "expectedError": "Error: Postal Code is required"
+  },
+  "negativeSpecialChars": {
+    "_description": "Checkout with special characters in name fields — exploratory probe",
+    "_note": "SauceDemo accepts all characters in name fields without validation. This is a known gap. Verify no XSS executes.",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "<script>alert(1)</script>",
+      "lastName": "O'Brien-García",
+      "postalCode": "!@#$%"
+    },
+    "expectedBehaviour": "Form should submit without executing scripts; text should be rendered as escaped plain text in overview"
+  },
+  "negativeLongStrings": {
+    "_description": "Checkout with very long strings in all fields",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "lastName": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "postalCode": "123456789012345678901234567890"
+    },
+    "expectedBehaviour": "App should either accept and display truncated text, or show a validation error. Must not crash."
+  },
+  "edgeSingleChar": {
+    "_description": "Checkout with single character in each field",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "A",
+      "lastName": "B",
+      "postalCode": "1"
+    },
+    "expectedBehaviour": "Order should complete successfully — no minimum length restrictions documented in requirements"
+  },
+  "edgeNumericNames": {
+    "_description": "Checkout with numeric values in name fields",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "12345",
+      "lastName": "67890",
+      "postalCode": "00000"
+    },
+    "expectedBehaviour": "App should accept numeric values in name fields (no alphabetic validation in requirements) and complete order"
+  },
+  "edgeSingleProduct": {
+    "_description": "Checkout with a single product only (Backpack)",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "postalCode": "90210"
+    },
+    "expectedSummary": {
+      "itemTotal": "$29.99",
+      "tax": "$2.40",
+      "total": "$32.39",
+      "payment": "SauceCard #31337",
+      "shipping": "Free Pony Express Delivery!"
+    }
+  },
+  "edgeCartBadge": {
+    "_description": "Add 2 items and verify cart badge shows correct count",
+    "products": ["backpack", "bikeLight"],
+    "expectedBadgeCount": "2"
+  },
+  "navCancelStepOne": {
+    "_description": "Click Cancel on Checkout Step One — should return to cart",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "postalCode": "90210"
+    },
+    "expectedUrl": "/cart.html",
+    "expectedCartState": "Items should still be in cart after cancel"
+  },
+  "navCancelStepTwo": {
+    "_description": "Click Cancel on Checkout Step Two — should return to inventory",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "postalCode": "90210"
+    },
+    "expectedUrl": "/inventory.html"
+  },
+  "navContinueShopping": {
+    "_description": "Click Continue Shopping from cart page — should return to inventory",
+    "expectedUrl": "/inventory.html",
+    "expectedBehaviour": "Cart items should persist after returning to inventory"
+  },
+  "navBackHome": {
+    "_description": "Click Back Home from order confirmation — should return to inventory with empty cart",
+    "products": ["backpack"],
+    "customer": {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "postalCode": "90210"
+    },
+    "expectedUrl": "/inventory.html",
+    "expectedCartBadge": null,
+    "expectedBehaviour": "Cart should be empty after completed order and clicking Back Home"
+  },
+  "uiCartPage": {
+    "_description": "UI element visibility checks on the Cart page",
+    "expectedElements": [
+      "Cart / Your Cart heading",
+      "QTY column header",
+      "Description column header",
+      "Product name for each item in cart",
+      "Product price for each item in cart",
+      "Remove button for each item",
+      "Continue Shopping button",
+      "Checkout button",
+      "Cart badge in header showing correct count"
+    ]
+  },
+  "uiCheckoutStepOne": {
+    "_description": "UI element visibility checks on Checkout Step One",
+    "expectedElements": [
+      "Checkout: Your Information heading",
+      "First Name input field",
+      "Last Name input field",
+      "Zip/Postal Code input field",
+      "Cancel button",
+      "Continue button"
+    ],
+    "fieldPlaceholders": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "postalCode": "Zip/Postal Code"
+    }
+  },
+  "uiCheckoutStepTwo": {
+    "_description": "UI element visibility checks on Checkout Step Two (Overview)",
+    "expectedElements": [
+      "Checkout: Overview heading",
+      "QTY column header",
+      "Description column header",
+      "Product details for each item",
+      "Payment Information label and value",
+      "Shipping Information label and value",
+      "Price Total section with item total, tax, and total",
+      "Cancel button",
+      "Finish button"
+    ]
+  },
+  "uiConfirmation": {
+    "_description": "UI element visibility checks on Checkout Complete page",
+    "expectedElements": [
+      "Checkout: Complete! heading",
+      "Thank you for your order! h2 heading",
+      "Dispatch confirmation message",
+      "Pony Express image",
+      "Back Home button"
+    ]
+  }
+}

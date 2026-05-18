@@ -1,0 +1,61 @@
+
+# ──────────────────────────────────────────────
+# Dependencies
+# ──────────────────────────────────────────────
+node_modules/
+package-lock.json
+
+# ──────────────────────────────────────────────
+# Environment & secrets
+# ──────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ──────────────────────────────────────────────
+# Playwright — generated artefacts (root-level)
+# ──────────────────────────────────────────────
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/reports/
+
+# ──────────────────────────────────────────────
+# Playwright — generated artefacts under reports/
+# Hashed run folders (videos, traces, screenshots per test)
+# and the last-run tracker are machine-specific noise.
+# Human-readable .md reports and summary .json files are kept.
+# ──────────────────────────────────────────────
+reports/test-results/checkout-*/
+reports/test-results/seed-*/
+reports/test-results/.last-run.json
+reports/test-results/initial-run-report.json
+reports/test-results/post-healing-run-report.json
+
+# Exploratory screenshots are binary blobs; commit only the
+# written findings document (specs/exploratory-testing-findings.md).
+reports/screenshots/
+
+# ──────────────────────────────────────────────
+# Playwright MCP tool cache
+# ──────────────────────────────────────────────
+.playwright-mcp/
+
+# ──────────────────────────────────────────────
+# TypeScript build output
+# ──────────────────────────────────────────────
+dist/
+*.tsbuildinfo
+
+# ──────────────────────────────────────────────
+# Editor — VS Code local/machine-specific config
+# ──────────────────────────────────────────────
+.vscode/mcp.json
+
+# ──────────────────────────────────────────────
+# OS junk
+# ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
