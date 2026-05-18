@@ -8,7 +8,14 @@ const ts = new Date()
   .slice(0, 19);
 
 /**
- * See https://playwright.dev/docs/test-configuration.
+ * Playwright Test Configuration
+ * Supports both UI and API testing
+ * 
+ * Run commands:
+ * - All tests: npx playwright test
+ * - UI tests only: npx playwright test tests/ui
+ * - API tests only: npx playwright test tests/api
+ * - Specific project: npx playwright test --project="UI-Chrome"
  */
 export default defineConfig({
   testDir: './tests',
@@ -20,18 +27,21 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
+  /* Test timeout */
+  timeout: 30000,
   /* All test output lives under reports/<timestamp>/ so each run is preserved */
   outputDir: `reports/runs/${ts}/artifacts`,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html', { outputFolder: `reports/runs/${ts}/html-report` }],
     ['json', { outputFile: `reports/runs/${ts}/test-results.json` }],
+    ['list'],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:3000',
-
+    /* Base URL for API tests */
+    baseURL: 'https://restful-booker.herokuapp.com',
+    
     /* Capture screenshot of every test — pass and fail — for report evidence */
     screenshot: 'on',
     /* Record HD video for every test so the report contains full visual playback */
@@ -41,44 +51,96 @@ export default defineConfig({
     },
     /* Collect trace for every test for the trace viewer */
     trace: 'on',
+    
+    /* Extra HTTP headers for API requests */
+    extraHTTPHeaders: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for UI and API tests */
   projects: [
+    // ========== UI Tests ==========
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'UI-Chrome',
+      testMatch: /tests\/ui\/.*\.spec\.ts/,
+      use: { 
+        ...devices['Desktop Chrome'],
+        // UI tests don't use baseURL, so override it
+        baseURL: undefined,
+      },
     },
 
-    // Uncomment for full cross-browser run (adds ~2–3 min to demo)
+    // Uncomment for full cross-browser UI testing
     // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
+    //   name: 'UI-Firefox',
+    //   testMatch: /tests\/ui\/.*\.spec\.ts/,
+    //   use: { 
+    //     ...devices['Desktop Firefox'],
+    //     baseURL: undefined,
+    //   },
     // },
 
     // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
+    //   name: 'UI-WebKit',
+    //   testMatch: /tests\/ui\/.*\.spec\.ts/,
+    //   use: { 
+    //     ...devices['Desktop Safari'],
+    //     baseURL: undefined,
+    //   },
     // },
+
+    // ========== API Tests ==========
+    {
+      name: 'API-Tests',
+      testMatch: /tests\/api\/.*\.spec\.ts/,
+      use: {
+        // API tests don't need browser context
+        baseURL: 'https://restful-booker.herokuapp.com',
+        extraHTTPHeaders: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      },
+    },
 
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
+    //   testMatch: /tests\/ui\/.*\.spec\.ts/,
+    //   use: { 
+    //     ...devices['Pixel 5'],
+    //     baseURL: undefined,
+    //   },
     // },
     // {
     //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
+    //   testMatch: /tests\/ui\/.*\.spec\.ts/,
+    //   use: { 
+    //     ...devices['iPhone 12'],
+    //     baseURL: undefined,
+    //   },
     // },
 
     /* Test against branded browsers. */
     // {
     //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    //   testMatch: /tests\/ui\/.*\.spec\.ts/,
+    //   use: { 
+    //     ...devices['Desktop Edge'], 
+    //     channel: 'msedge',
+    //     baseURL: undefined,
+    //   },
     // },
     // {
     //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    //   testMatch: /tests\/ui\/.*\.spec\.ts/,
+    //   use: { 
+    //     ...devices['Desktop Chrome'], 
+    //     channel: 'chrome',
+    //     baseURL: undefined,
+    //   },
     // },
   ],
 
