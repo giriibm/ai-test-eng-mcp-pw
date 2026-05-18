@@ -22,22 +22,22 @@
 
 | File | Source |
 |---|---|
-| `specs/manual-test-cases.md` | Output of Part 1 — must exist before starting this part |
+| `util/manual-tests/manual-test-cases.md` | Output of Part 1 — must exist before starting this part |
 
 ## Outputs Produced by This Part
 
 | File | Content |
 |---|---|
-| `specs/ecom-checkout-test-plan.md` | Complete structured test plan, one entry per scenario from Section 2.3 |
+| `util/manual-tests/ecom-checkout-test-plan.md` | Complete structured test plan, one entry per scenario from Section 2.3 |
 
 ---
 
 ## How to Use This Part
 
-1. Confirm `specs/manual-test-cases.md` exists on disk (output of Part 1).
+1. Confirm `util/manual-tests/manual-test-cases.md` exists on disk (output of Part 1).
 2. Paste this file into the **Playwright Test Planner** agent chat.
 3. The agent navigates the live application, then builds the full test plan from the manual test cases.
-4. The plan is saved to `specs/ecom-checkout-test-plan.md`.
+4. The plan is saved to `util/manual-tests/ecom-checkout-test-plan.md`.
 5. Verify the output file exists before proceeding to Part 3.
 
 ---
@@ -46,7 +46,7 @@
 
 ### 2.1 Instructions for the Playwright Test Planner agent
 
-Using the manual test cases in `specs/manual-test-cases.md` (produced in Part 1), the **Playwright Test Planner** must generate a complete, production-ready test plan.
+Using the manual test cases in `util/manual-tests/manual-test-cases.md` (produced in Part 1), the **Playwright Test Planner** must generate a complete, production-ready test plan.
 
 The agent must:
 
@@ -56,7 +56,7 @@ The agent must:
 
 2. Visually inspect each page involved in the checkout flow (login, products, cart, checkout-step-one, checkout-step-two, checkout-complete) before writing any test step, so that selectors and element labels are accurate.
 
-3. For every manual test case from `specs/manual-test-cases.md` produce a corresponding test plan entry using the structure below.
+3. For every manual test case from `util/manual-tests/manual-test-cases.md` produce a corresponding test plan entry using the structure below.
 
 ### 2.2 Test plan entry structure
 
@@ -120,7 +120,7 @@ The test plan MUST include entries for ALL of the following scenarios:
 Save the completed test plan as:
 
 ```
-specs/ecom-checkout-test-plan.md
+util/manual-tests/ecom-checkout-test-plan.md
 ```
 
 ---
@@ -129,7 +129,7 @@ specs/ecom-checkout-test-plan.md
 
 Confirm every item below before opening `e2e-qa-prompt-part3.md`.
 
-- [ ] `specs/ecom-checkout-test-plan.md` exists on disk
+- [ ] `util/manual-tests/ecom-checkout-test-plan.md` exists on disk
 - [ ] All 19 scenarios (HP-01 through UI-04) have a test plan entry
 - [ ] Every entry has an `Output File` path under `tests/checkout/` using kebab-case naming
 - [ ] Every entry has a `Test Data Reference` key pointing to `tests/data/checkout-test-data.json`

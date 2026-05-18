@@ -1,5 +1,5 @@
 # Manual Test Cases — SCRUM-101: E-commerce Checkout Process
-Generated: 2026-05-15 | Source: userstory/ecom-checkout.md
+Generated: 2026-05-15 | Source: util/userstory/ecom-checkout.md
 
 ---
 

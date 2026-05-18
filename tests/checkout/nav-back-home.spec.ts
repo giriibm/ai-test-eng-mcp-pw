@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -33,6 +33,6 @@ test.describe('Navigation Flow', () => {
     await expect(page).toHaveURL(/inventory\.html/);
     await expect(page.locator('[data-test="shopping-cart-badge"]')).not.toBeVisible();
 
-    await page.screenshot({ path: 'specs/screenshots/nf-04-back-home-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/nf-04-back-home-pass.png' });
   });
 });

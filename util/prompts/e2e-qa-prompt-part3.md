@@ -22,21 +22,21 @@
 
 | File | Source |
 |---|---|
-| `specs/manual-test-cases.md` | Output of Part 1 |
-| `specs/ecom-checkout-test-plan.md` | Output of Part 2 — use as a reference map for coverage |
+| `util/manual-tests/manual-test-cases.md` | Output of Part 1 |
+| `util/manual-tests/ecom-checkout-test-plan.md` | Output of Part 2 — use as a reference map for coverage |
 
 ## Outputs Produced by This Part
 
 | File | Content |
 |---|---|
-| `specs/exploratory-testing-findings.md` | Exploratory testing summary + all bug reports |
+| `util/manual-tests/exploratory-testing-findings.md` | Exploratory testing summary + all bug reports |
 | `reports/screenshots/EX-*.png` | All screenshots taken during exploration |
 
 ---
 
 ## How to Use This Part
 
-1. Confirm `specs/ecom-checkout-test-plan.md` exists on disk (output of Part 2).
+1. Confirm `util/manual-tests/ecom-checkout-test-plan.md` exists on disk (output of Part 2).
 2. Paste this file into the **Playwright MCP Server** agent chat.
 3. The agent navigates the live application freely, beyond the scripted paths, and documents every observation.
 4. All findings and screenshots are saved as described in Section 3.8.
@@ -54,7 +54,7 @@ Exploratory testing uncovers defects, usability issues, and unexpected behaviour
 
 1. The application at `https://www.saucedemo.com` is reachable.
 2. Credentials available: username `standard_user` / password `secret_sauce`.
-3. Parts 1 and 2 are complete — use `specs/manual-test-cases.md` and `specs/ecom-checkout-test-plan.md` as a reference map, but intentionally go **beyond** the scripted paths.
+3. Parts 1 and 2 are complete — use `util/manual-tests/manual-test-cases.md` and `util/manual-tests/ecom-checkout-test-plan.md` as a reference map, but intentionally go **beyond** the scripted paths.
 
 ### 3.3 Exploratory Testing Charter
 
@@ -103,10 +103,10 @@ Execute the following steps in order for each charter:
 **Phase D — Document Findings**
 9. For every confirmed anomaly, create a bug report using the template in Section 3.5.
 10. Assign a severity level using the scale in Section 3.6.
-11. Append all bug reports to the file `specs/exploratory-testing-findings.md`.
+11. Append all bug reports to the file `util/manual-tests/exploratory-testing-findings.md`.
 
 **Phase E — Summarise**
-12. After all charters are complete, write an **Exploratory Testing Summary** at the top of `specs/exploratory-testing-findings.md` containing:
+12. After all charters are complete, write an **Exploratory Testing Summary** at the top of `util/manual-tests/exploratory-testing-findings.md` containing:
     - Total charters executed.
     - Total time spent per charter.
     - Total bugs found, broken down by severity.
@@ -168,7 +168,7 @@ The agent should also try the following targeted probes — none of these are co
 
 | File | Content |
 |---|---|
-| `specs/exploratory-testing-findings.md` | Summary + all bug reports in template format |
+| `util/manual-tests/exploratory-testing-findings.md` | Summary + all bug reports in template format |
 | `reports/screenshots/EX-*.png` | All screenshots taken during exploration |
 
 ---
@@ -177,7 +177,7 @@ The agent should also try the following targeted probes — none of these are co
 
 Confirm every item below before opening `e2e-qa-prompt-part4.md`.
 
-- [ ] `specs/exploratory-testing-findings.md` exists on disk
+- [ ] `util/manual-tests/exploratory-testing-findings.md` exists on disk
 - [ ] The file begins with the Exploratory Testing Summary (charters executed, time, bug counts by severity)
 - [ ] All 8 charters (EX-01 through EX-08) have been executed and documented
 - [ ] Every confirmed bug has a full `BUG-*` entry using the template in Section 3.5

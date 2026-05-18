@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -29,6 +29,6 @@ test.describe('UI Element Validation', () => {
     await expect(page.getByRole('button', { name: /Continue Shopping/i })).toBeVisible();
     await expect(page.locator('[data-test="checkout"]')).toBeVisible();
 
-    await page.screenshot({ path: 'specs/screenshots/ui-01-cart-page-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/ui-01-cart-page-pass.png' });
   });
 });

@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -34,6 +34,6 @@ test.describe('Negative — Validation Errors', () => {
       currentUrl.includes('/checkout-step-one.html') || currentUrl.includes('/checkout-step-two.html')
     ).toBe(true);
 
-    await page.screenshot({ path: 'specs/screenshots/ne-05-special-chars-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/ne-05-special-chars-pass.png' });
   });
 });

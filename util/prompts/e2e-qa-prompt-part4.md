@@ -22,8 +22,8 @@
 
 | File | Source |
 |---|---|
-| `specs/ecom-checkout-test-plan.md` | Output of Part 2 |
-| `specs/exploratory-testing-findings.md` | Output of Part 3 — read for selector observations and UI quirks |
+| `util/manual-tests/ecom-checkout-test-plan.md` | Output of Part 2 |
+| `util/manual-tests/exploratory-testing-findings.md` | Output of Part 3 — read for selector observations and UI quirks |
 
 ## Outputs Produced by This Part
 
@@ -44,7 +44,7 @@
 
 ## How to Use This Part
 
-1. Confirm `specs/ecom-checkout-test-plan.md` and `specs/exploratory-testing-findings.md` both exist on disk.
+1. Confirm `util/manual-tests/ecom-checkout-test-plan.md` and `util/manual-tests/exploratory-testing-findings.md` both exist on disk.
 2. Paste this file into the **playwright-test-generator** agent chat.
 3. The agent creates the test data JSON, all POM files, and all spec files in order.
 4. Verify all output files exist and the happy-path spec passes before proceeding to Part 5.
@@ -204,14 +204,14 @@ Each scenario key must include all input values and expected output values used 
 
 ### 5.1 Purpose
 
-Using the test plan from `specs/ecom-checkout-test-plan.md`, the test data JSON from Step 4, and the selector and behaviour insights from `specs/exploratory-testing-findings.md`, the **`playwright-test-generator`** agent must generate production-ready Playwright automation scripts organised as a **Page Object Model (POM)** framework.
+Using the test plan from `util/manual-tests/ecom-checkout-test-plan.md`, the test data JSON from Step 4, and the selector and behaviour insights from `util/manual-tests/exploratory-testing-findings.md`, the **`playwright-test-generator`** agent must generate production-ready Playwright automation scripts organised as a **Page Object Model (POM)** framework.
 
 ### 5.2 Pre-conditions
 
 1. Parts 1–3 are complete and all their output files exist.
-2. `specs/ecom-checkout-test-plan.md` exists and is fully populated.
+2. `util/manual-tests/ecom-checkout-test-plan.md` exists and is fully populated.
 3. `tests/data/checkout-test-data.json` exists with all scenario keys (created in Step 4).
-4. `specs/exploratory-testing-findings.md` exists — the agent MUST read this file to learn which selectors proved reliable and which application behaviours require special wait handling.
+4. `util/manual-tests/exploratory-testing-findings.md` exists — the agent MUST read this file to learn which selectors proved reliable and which application behaviours require special wait handling.
 
 ### 5.3 POM Framework Structure
 
@@ -505,7 +505,7 @@ The agent MUST apply the following wait strategies based on observed application
 
 ### 5.7 Selector Reliability Rules (from Exploratory Testing)
 
-The agent MUST cross-reference `specs/exploratory-testing-findings.md` for any selector that failed or proved unstable during exploration and apply the following rules:
+The agent MUST cross-reference `util/manual-tests/exploratory-testing-findings.md` for any selector that failed or proved unstable during exploration and apply the following rules:
 
 1. Prefer `data-test` attributes — SauceDemo consistently uses `data-test` on all interactive elements.
 2. If a `data-test` attribute is not present on an element, use `getByRole()` with an explicit `name`.
@@ -538,13 +538,13 @@ Every spec MUST include assertions from each of the following categories for its
 
 ### 5.10 Generation Steps for the `playwright-test-generator` Agent
 
-> **Configuration first.** Before creating any POM or spec files, update `playwright.config.ts` to set `screenshot: 'on'`, `video: 'on'`, `trace: 'on'`, `outputDir: 'reports/test-results'`, and `reporter: [['html'], ['json', { outputFile: 'reports/test-results/initial-run-report.json' }]]`. Every test run must produce screenshot, video, and trace artefacts embedded in the Playwright HTML report (`playwright-report/`). This is a hard requirement — do not proceed with file generation until the config is saved.
+> **Configuration first.** Before creating any POM or spec files, update `playwright.config.ts` to set `screenshot: 'on'`, `video: 'on'`, `trace: 'on'`, `outputDir: 'reports/test-results'`, and `reporter: [['html', { outputFolder: 'reports/html-report' }], ['json', { outputFile: 'reports/runs/<timestamp>/test-results.json' }]]`. Every test run must produce screenshot, video, and trace artefacts embedded in the Playwright HTML report (`reports/runs/<timestamp>/html-report/`). This is a hard requirement — do not proceed with file generation until the config is saved.
 
 Execute in this exact order:
 
-1. **Read** `specs/ecom-checkout-test-plan.md` — extract all test IDs, titles, steps, and expected results.
+1. **Read** `util/manual-tests/ecom-checkout-test-plan.md` — extract all test IDs, titles, steps, and expected results.
 2. **Read** `tests/data/checkout-test-data.json` — understand all available scenario keys and data shapes.
-3. **Read** `specs/exploratory-testing-findings.md` — extract selector observations, wait behaviour notes, and any bug-related UI quirks that affect automation.
+3. **Read** `util/manual-tests/exploratory-testing-findings.md` — extract selector observations, wait behaviour notes, and any bug-related UI quirks that affect automation.
 4. **Create** `tests/pages/BasePage.ts` first — all other page objects depend on it.
 5. **Create** page objects in dependency order: `LoginPage` → `InventoryPage` → `CartPage` → `CheckoutStepOnePage` → `CheckoutStepTwoPage` → `CheckoutCompletePage`.
 6. **Create** `tests/helpers/TestDataHelper.ts`.

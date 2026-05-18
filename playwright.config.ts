@@ -1,12 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+/* Timestamp shared across all paths in this run — format: YYYY-MM-DD_HH-MM-SS */
+const ts = new Date()
+  .toISOString()
+  .replace('T', '_')
+  .replace(/:/g, '-')
+  .slice(0, 19);
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -21,10 +20,12 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
+  /* All test output lives under reports/<timestamp>/ so each run is preserved */
+  outputDir: `reports/runs/${ts}/artifacts`,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html'],
-    ['json', { outputFile: 'specs/test-results/initial-run-report.json' }],
+    ['html', { outputFolder: `reports/runs/${ts}/html-report` }],
+    ['json', { outputFile: `reports/runs/${ts}/test-results.json` }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -33,8 +34,11 @@ export default defineConfig({
 
     /* Capture screenshot of every test — pass and fail — for report evidence */
     screenshot: 'on',
-    /* Record video for every test so the report contains full visual playback */
-    video: 'on',
+    /* Record HD video for every test so the report contains full visual playback */
+    video: {
+      mode: 'on',
+      size: { width: 1280, height: 720 },
+    },
     /* Collect trace for every test for the trace viewer */
     trace: 'on',
   },
@@ -46,15 +50,16 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // Uncomment for full cross-browser run (adds ~2–3 min to demo)
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {

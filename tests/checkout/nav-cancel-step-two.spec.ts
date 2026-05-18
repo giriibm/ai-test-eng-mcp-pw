@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -27,6 +27,6 @@ test.describe('Navigation Flow', () => {
     await expect(page).toHaveURL(/inventory\.html/);
     await expect(page.getByText('Products')).toBeVisible();
 
-    await page.screenshot({ path: 'specs/screenshots/nf-02-cancel-step-two-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/nf-02-cancel-step-two-pass.png' });
   });
 });

@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -32,6 +32,6 @@ test.describe('Edge Cases', () => {
     await inventoryPage.goToCart();
     expect(await cartPage.getItemCount()).toBe(3);
 
-    await page.screenshot({ path: 'specs/screenshots/ec-04-cart-badge-count-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/ec-04-cart-badge-count-pass.png' });
   });
 });

@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -31,6 +31,6 @@ test.describe('Negative — Validation Errors', () => {
     expect(await stepOnePage.getErrorMessage()).toBe('Error: First Name is required');
     await expect(page).toHaveURL(/checkout-step-one\.html/);
 
-    await page.screenshot({ path: 'specs/screenshots/ne-01-all-fields-empty-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/ne-01-all-fields-empty-pass.png' });
   });
 });

@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -31,6 +31,6 @@ test.describe('Negative — Validation Errors', () => {
     // Verify last name required error
     expect(await stepOnePage.getErrorMessage()).toBe('Error: Last Name is required');
 
-    await page.screenshot({ path: 'specs/screenshots/ne-03-last-name-empty-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/ne-03-last-name-empty-pass.png' });
   });
 });

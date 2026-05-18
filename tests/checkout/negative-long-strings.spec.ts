@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -36,6 +36,6 @@ test.describe('Negative — Validation Errors', () => {
     ).toBe(true);
     await expect(page.locator('body')).toBeVisible();
 
-    await page.screenshot({ path: 'specs/screenshots/ne-06-long-strings-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/ne-06-long-strings-pass.png' });
   });
 });

@@ -22,21 +22,21 @@
 
 | File | Source |
 |---|---|
-| `userstory/ecom-checkout.md` | Provided in workspace — read this before producing any test cases |
+| `util/userstory/ecom-checkout.md` | Provided in workspace — read this before producing any test cases |
 
 ## Outputs Produced by This Part
 
 | File | Content |
 |---|---|
-| `specs/manual-test-cases.md` | All structured `TC-*` blocks, one per scenario, grouped by AC |
+| `util/manual-tests/manual-test-cases.md` | All structured `TC-*` blocks, one per scenario, grouped by AC |
 
 ---
 
 ## How to Use This Part
 
 1. Paste this file into the **Playwright MCP Server** agent chat.
-2. The agent reads `userstory/ecom-checkout.md` and produces all manual test cases.
-3. Save all test case output to `specs/manual-test-cases.md`.
+2. The agent reads `util/userstory/ecom-checkout.md` and produces all manual test cases.
+3. Save all test case output to `util/manual-tests/manual-test-cases.md`.
 4. Verify the output file exists on disk before proceeding to Part 2.
 5. Execute **only Step 1** from this file — Steps 2–8 below are preserved for reference only.
 
@@ -49,7 +49,7 @@
 Read the file at:
 
 ```
-userstory/ecom-checkout.md
+util/userstory/ecom-checkout.md
 ```
 
 Extract every Acceptance Criterion (AC), business rule, and technical note from the document.
@@ -95,7 +95,7 @@ You MUST produce at least one test case for each of the following categories:
 Save all produced test cases to:
 
 ```
-specs/manual-test-cases.md
+util/manual-tests/manual-test-cases.md
 ```
 
 ---
@@ -104,7 +104,7 @@ specs/manual-test-cases.md
 
 Confirm every item below before opening `e2e-qa-prompt-part2.md`.
 
-- [ ] `specs/manual-test-cases.md` exists on disk
+- [ ] `util/manual-tests/manual-test-cases.md` exists on disk
 - [ ] At least one `TC-*` block exists for each of the 6 required categories: Happy Path, Negative–Empty Fields, Negative–Invalid Data, Edge Case, Navigation, UI Element Validation
 - [ ] Every `TC-*` block uses the full template (Title, Objective, Scope, Pre-conditions, Steps, Data, AC Met, Pass/Fail Criteria)
 - [ ] Every test step has a corresponding `Expected:` outcome
@@ -199,7 +199,7 @@ The test plan MUST include entries for ALL of the following scenarios:
 Save the completed test plan as:
 
 ```
-specs/ecom-checkout-test-plan.md
+util/manual-tests/ecom-checkout-test-plan.md
 ```
 
 ---
@@ -263,10 +263,10 @@ Execute the following steps in order for each charter:
 **Phase D — Document Findings**
 9. For every confirmed anomaly, create a bug report using the template in Section 3.5.
 10. Assign a severity level using the scale in Section 3.6.
-11. Append all bug reports to the file `specs/exploratory-testing-findings.md`.
+11. Append all bug reports to the file `util/manual-tests/exploratory-testing-findings.md`.
 
 **Phase E — Summarise**
-12. After all charters are complete, write an **Exploratory Testing Summary** at the top of `specs/exploratory-testing-findings.md` containing:
+12. After all charters are complete, write an **Exploratory Testing Summary** at the top of `util/manual-tests/exploratory-testing-findings.md` containing:
     - Total charters executed.
     - Total time spent per charter.
     - Total bugs found, broken down by severity.
@@ -328,7 +328,7 @@ The agent should also try the following targeted probes — none of these are co
 
 | File | Content |
 |---|---|
-| `specs/exploratory-testing-findings.md` | Summary + all bug reports in template format |
+| `util/manual-tests/exploratory-testing-findings.md` | Summary + all bug reports in template format |
 | `reports/screenshots/EX-*.png` | All screenshots taken during exploration |
 
 ---
@@ -491,9 +491,9 @@ Using the test plan from Step 2, the test data JSON from Step 4, and the selecto
 ### 5.2 Pre-conditions
 
 1. Steps 1–4 are complete.
-2. `specs/ecom-checkout-test-plan.md` exists and is fully populated.
+2. `util/manual-tests/ecom-checkout-test-plan.md` exists and is fully populated.
 3. `tests/data/checkout-test-data.json` exists with all scenario keys.
-4. `specs/exploratory-testing-findings.md` exists — the agent MUST read this file to learn which selectors proved reliable and which application behaviours require special wait handling.
+4. `util/manual-tests/exploratory-testing-findings.md` exists — the agent MUST read this file to learn which selectors proved reliable and which application behaviours require special wait handling.
 
 ### 5.3 POM Framework Structure
 
@@ -787,7 +787,7 @@ The agent MUST apply the following wait strategies based on observed application
 
 ### 5.7 Selector Reliability Rules (from Exploratory Testing)
 
-The agent MUST cross-reference `specs/exploratory-testing-findings.md` for any selector that failed or proved unstable during exploration and apply the following rules:
+The agent MUST cross-reference `util/manual-tests/exploratory-testing-findings.md` for any selector that failed or proved unstable during exploration and apply the following rules:
 
 1. Prefer `data-test` attributes — SauceDemo consistently uses `data-test` on all interactive elements.
 2. If a `data-test` attribute is not present on an element, use `getByRole()` with an explicit `name`.
@@ -820,13 +820,13 @@ Every spec MUST include assertions from each of the following categories for its
 
 ### 5.10 Generation Steps for the `playwright-test-generator` Agent
 
-> **Configuration first.** Before creating any POM or spec files, update `playwright.config.ts` to set `screenshot: 'on'`, `video: 'on'`, `trace: 'on'`, `outputDir: 'reports/test-results'`, and `reporter: [['html'], ['json', { outputFile: 'reports/test-results/initial-run-report.json' }]]`. Every test run must produce screenshot, video, and trace artefacts that are embedded in the Playwright HTML report (`playwright-report/`). This is a hard requirement — do not proceed with file generation until the config is saved.
+> **Configuration first.** Before creating any POM or spec files, update `playwright.config.ts` to set `screenshot: 'on'`, `video: 'on'`, `trace: 'on'`, `outputDir: 'reports/test-results'`, and `reporter: [['html', { outputFolder: 'reports/html-report' }], ['json', { outputFile: 'reports/runs/<timestamp>/test-results.json' }]]`. Every test run must produce screenshot, video, and trace artefacts that are embedded in the Playwright HTML report (`reports/runs/<timestamp>/html-report/`). This is a hard requirement — do not proceed with file generation until the config is saved.
 
 Execute in this exact order:
 
-1. **Read** `specs/ecom-checkout-test-plan.md` — extract all test IDs, titles, steps, and expected results.
+1. **Read** `util/manual-tests/ecom-checkout-test-plan.md` — extract all test IDs, titles, steps, and expected results.
 2. **Read** `tests/data/checkout-test-data.json` — understand all available scenario keys and data shapes.
-3. **Read** `specs/exploratory-testing-findings.md` — extract selector observations, wait behaviour notes, and any bug-related UI quirks that affect automation.
+3. **Read** `util/manual-tests/exploratory-testing-findings.md` — extract selector observations, wait behaviour notes, and any bug-related UI quirks that affect automation.
 4. **Create** `tests/pages/BasePage.ts` first — all other page objects depend on it.
 5. **Create** page objects in dependency order: `LoginPage` → `InventoryPage` → `CartPage` → `CheckoutStepOnePage` → `CheckoutStepTwoPage` → `CheckoutCompletePage`.
 6. **Create** `tests/helpers/TestDataHelper.ts`.
@@ -849,7 +849,7 @@ After the `playwright-test-generator` agent produces the POM-based automation sc
 
 1. All files listed in Step 5 Section 5.3 exist in the workspace.
 2. `tests/data/checkout-test-data.json` is populated.
-3. `specs/exploratory-testing-findings.md` is available for cross-referencing known UI quirks.
+3. `util/manual-tests/exploratory-testing-findings.md` is available for cross-referencing known UI quirks.
 4. Playwright is installed and `npx playwright install` has been run for all browsers.
 5. The application at `https://www.saucedemo.com` is reachable.
 
@@ -865,8 +865,8 @@ Execute the following phases in strict order. Do not skip a phase even if the pr
    ```
    npx playwright test --reporter=html,json
    ```
-2. Save the raw JSON report as `reports/test-results/initial-run-report.json`.
-3. Open the HTML report and take a screenshot of the results summary. Save it as `reports/test-results/initial-run-summary.png`.
+2. Save the raw JSON report as `reports/runs/<timestamp>/test-results.json`.
+3. Open the HTML report and take a screenshot of the results summary. Save it as `reports/runs/<timestamp>/initial-run-summary.png`.
 4. Record the following metrics:
    - Total tests run
    - Total passed
@@ -874,7 +874,7 @@ Execute the following phases in strict order. Do not skip a phase even if the pr
    - Total skipped
    - Flaky tests (passed on retry)
 5. Proceed to Phase 2 for every test that did not pass on the first attempt.
-6. Verify that the `playwright-report/` folder has been generated. Open it with `npx playwright show-report` and confirm:
+6. Verify that the `reports/runs/<timestamp>/html-report/` folder has been generated. Open it with `npx playwright show-report` and confirm:
    - Every test entry has an embedded **screenshot** of the final expected condition (the success state captured at test end).
    - Every test entry has an embedded **video recording** of the full test run.
    - Every test entry has an embedded **trace** that can be opened in the trace viewer.
@@ -903,7 +903,7 @@ For each failing or flaky test, open the Playwright trace viewer (`npx playwrigh
 | Trace File | Path to the `.zip` trace file |
 | Intermittent? | Did it pass on retry? Yes / No |
 
-Record all triage data for every failure in `reports/test-results/failure-triage.md` before applying any fix.
+Record all triage data for every failure in `reports/runs/<timestamp>/failure-triage.md` before applying any fix.
 
 ---
 
@@ -950,7 +950,7 @@ For each root cause category, apply the prescribed healing steps in order. Do no
 5. If a `strict mode violation` error appears (multiple elements match), make the selector more specific by chaining a parent context: `page.locator('.parent-class').locator('[data-test="..."]')`.
 6. Re-run the single spec to confirm the fix: `npx playwright test <spec-file> --project=chromium`.
 7. Confirm the fix also passes on Firefox and Safari.
-8. Document the selector change in `reports/test-results/healing-log.md` (see Section 6.7).
+8. Document the selector change in `reports/runs/<timestamp>/healing-log.md` (see Section 6.7).
 
 ---
 
@@ -974,7 +974,7 @@ For each root cause category, apply the prescribed healing steps in order. Do no
 
 3. Apply the fix in the Page Object method — not in the spec file.
 4. Re-run the spec 3 times consecutively to confirm the fix eliminates flakiness: `npx playwright test <spec-file> --repeat-each=3`.
-5. Document the change in `reports/test-results/healing-log.md`.
+5. Document the change in `reports/runs/<timestamp>/healing-log.md`.
 
 ---
 
@@ -990,7 +990,7 @@ For each root cause category, apply the prescribed healing steps in order. Do no
    - If the **application value is wrong**: the test is correctly detecting a bug. Do NOT fix the assertion — log a bug report using the template in Step 3 Section 3.5 and mark the test with `test.fail()` pending the bug fix.
 4. If the mismatch is due to whitespace or formatting (e.g., `"$89.97 "` vs `"$89.97"`), switch from `.toHaveText()` to `.toContainText()` or trim the actual value.
 5. If a price total is calculated at runtime and may vary, use a regex assertion: `await expect(label).toHaveText(/\$\d+\.\d{2}/)`.
-6. Document the data change or bug report in `reports/test-results/healing-log.md`.
+6. Document the data change or bug report in `reports/runs/<timestamp>/healing-log.md`.
 
 ---
 
@@ -1004,7 +1004,7 @@ For each root cause category, apply the prescribed healing steps in order. Do no
 3. If a `beforeEach` hook fails due to a prior test leaving the application in a broken state (e.g., a half-completed checkout), add `await page.context().clearCookies()` at the start of `beforeEach` to guarantee a clean session.
 4. If the login page itself fails to load, add `await page.waitForLoadState('domcontentloaded')` in `BasePage.navigate()`.
 5. Run only the `beforeEach` setup by isolating it: add a temporary `test('setup check', ...)` that only runs login and asserts the products page.
-6. Document in `reports/test-results/healing-log.md`.
+6. Document in `reports/runs/<timestamp>/healing-log.md`.
 
 ---
 
@@ -1027,7 +1027,7 @@ For each root cause category, apply the prescribed healing steps in order. Do no
    await this.input.fill(value);
    ```
 4. Re-run on the failing browser 3 times to confirm: `npx playwright test <spec-file> --project=firefox --repeat-each=3`.
-5. Document in `reports/test-results/healing-log.md`.
+5. Document in `reports/runs/<timestamp>/healing-log.md`.
 
 ---
 
@@ -1036,12 +1036,12 @@ For each root cause category, apply the prescribed healing steps in order. Do no
 **Symptoms:** The action completes but the assertion logic is incorrect — asserting the wrong element, wrong text, or wrong state.
 
 **Healing steps:**
-1. Re-read the test plan entry for this test ID in `specs/ecom-checkout-test-plan.md`.
+1. Re-read the test plan entry for this test ID in `util/manual-tests/ecom-checkout-test-plan.md`.
 2. Compare the intended assertion in the plan against what is coded in the spec.
 3. If the spec asserts something not stated in the plan, remove or correct the assertion.
 4. If the plan says to assert X but the spec asserts Y, align the spec to the plan — update the spec, not the plan.
 5. If the assertion type is wrong (e.g., `.toHaveText()` used where `.toContainText()` is needed), correct it using the assertion rules in Step 5 Section 5.8.
-6. Document in `reports/test-results/healing-log.md`.
+6. Document in `reports/runs/<timestamp>/healing-log.md`.
 
 ---
 
@@ -1070,7 +1070,7 @@ FOR EACH failing test:
   IF the test cannot be healed after 3 fix attempts:
     → Classify as a confirmed application defect
     → Mark the test with test.fail() and a descriptive comment
-    → Log a bug report in specs/exploratory-testing-findings.md
+    → Log a bug report in util/manual-tests/exploratory-testing-findings.md
     → Record in healing-log.md with Re-run Result: CONFIRMED BUG
 END FOR
 ```
@@ -1091,7 +1091,7 @@ Only after every individual test has been healed (or classified as a bug), run t
    ```
    npx playwright test --reporter=html,json
    ```
-2. Save the report as `reports/test-results/post-healing-run-report.json`.
+2. Save the report as `reports/runs/<timestamp>/test-results.json`.
 3. Every previously failing test MUST now either:
    - **Pass** — healing was successful, OR
    - Be marked `test.fail()` with a linked bug report — the failure is a confirmed application defect.
@@ -1108,7 +1108,7 @@ Only after every individual test has been healed (or classified as a bug), run t
 
 ### 6.7 Healing Log Format
 
-For every fix applied, append an entry to `reports/test-results/healing-log.md` using the following template:
+For every fix applied, append an entry to `reports/runs/<timestamp>/healing-log.md` using the following template:
 
 ```
 HEAL-<SEQ>
@@ -1132,11 +1132,11 @@ Re-run Result    : PASS / FAIL (with reason if still failing)
 
 | File | Content |
 |---|---|
-| `reports/test-results/initial-run-report.json` | Raw JSON output from the first full run |
-| `reports/test-results/initial-run-summary.png` | Screenshot of the HTML report summary |
-| `reports/test-results/failure-triage.md` | Triage table for all failures before healing |
-| `reports/test-results/healing-log.md` | Chronological log of every fix applied |
-| `reports/test-results/post-healing-run-report.json` | Raw JSON output after all healing is complete |
+| `reports/runs/<timestamp>/test-results.json` | Raw JSON output from the first full run |
+| `reports/runs/<timestamp>/initial-run-summary.png` | Screenshot of the HTML report summary |
+| `reports/runs/<timestamp>/failure-triage.md` | Triage table for all failures before healing |
+| `reports/runs/<timestamp>/healing-log.md` | Chronological log of every fix applied |
+| `reports/runs/<timestamp>/test-results.json` | Raw JSON output after all healing is complete |
 
 ---
 
@@ -1149,15 +1149,15 @@ After Steps 1–6 are complete, produce a single, comprehensive test report that
 ### 7.2 Pre-conditions
 
 1. Step 1 manual test cases are written and reviewed.
-2. Step 2 test plan exists at `specs/ecom-checkout-test-plan.md`.
-3. Step 3 exploratory testing findings exist at `specs/exploratory-testing-findings.md`.
+2. Step 2 test plan exists at `util/manual-tests/ecom-checkout-test-plan.md`.
+3. Step 3 exploratory testing findings exist at `util/manual-tests/exploratory-testing-findings.md`.
 4. Step 4 test data JSON exists at `tests/data/checkout-test-data.json`.
 5. Step 5 automation scripts exist under `tests/`.
 6. Step 6 healing is complete:
-   - `reports/test-results/initial-run-report.json` exists.
-   - `reports/test-results/post-healing-run-report.json` exists.
-   - `reports/test-results/failure-triage.md` exists.
-   - `reports/test-results/healing-log.md` exists.
+   - `reports/runs/<timestamp>/test-results.json` exists.
+   - `reports/runs/<timestamp>/test-results.json` exists.
+   - `reports/runs/<timestamp>/failure-triage.md` exists.
+   - `reports/runs/<timestamp>/healing-log.md` exists.
 
 ### 7.3 Report Generation Steps
 
@@ -1165,13 +1165,13 @@ Execute the following steps in order:
 
 **Step 7.3.1 — Read All Source Data**
 
-1. Read `userstory/ecom-checkout.md` — extract the story title, acceptance criteria IDs, and business rules.
-2. Read `specs/ecom-checkout-test-plan.md` — extract all Test IDs, titles, scenario types, and expected results.
-3. Read `specs/exploratory-testing-findings.md` — extract the summary section: charters executed, time spent, bug count by severity.
-4. Read `reports/test-results/initial-run-report.json` — extract total tests, passed, failed, flaky counts and per-browser breakdown.
-5. Read `reports/test-results/post-healing-run-report.json` — extract final pass/fail/confirmed-bug counts and per-browser breakdown.
-6. Read `reports/test-results/failure-triage.md` — extract every failure entry.
-7. Read `reports/test-results/healing-log.md` — extract every `HEAL-<SEQ>` entry.
+1. Read `util/userstory/ecom-checkout.md` — extract the story title, acceptance criteria IDs, and business rules.
+2. Read `util/manual-tests/ecom-checkout-test-plan.md` — extract all Test IDs, titles, scenario types, and expected results.
+3. Read `util/manual-tests/exploratory-testing-findings.md` — extract the summary section: charters executed, time spent, bug count by severity.
+4. Read `reports/runs/<timestamp>/test-results.json` — extract total tests, passed, failed, flaky counts and per-browser breakdown.
+5. Read `reports/runs/<timestamp>/test-results.json` — extract final pass/fail/confirmed-bug counts and per-browser breakdown.
+6. Read `reports/runs/<timestamp>/failure-triage.md` — extract every failure entry.
+7. Read `reports/runs/<timestamp>/healing-log.md` — extract every `HEAL-<SEQ>` entry.
 
 **Step 7.3.2 — Compute Report Metrics**
 
@@ -1195,7 +1195,7 @@ Calculate the following before writing the report:
 Create the file:
 
 ```
-reports/test-results/test-report-<YYYY-MM-DD>.md
+reports/runs/<timestamp>/test-report-<YYYY-MM-DD>.md
 ```
 
 Use today's date (`2026-05-15`) in the filename.
@@ -1347,8 +1347,8 @@ Steps to Reproduce:
   3. <step>
 Actual Result    : <what happened>
 Expected Result  : <what should have happened>
-Screenshot       : <path to screenshot of expected condition — from playwright-report/ or specs/screenshots/>
-Video Recording  : <path to video file embedded in playwright-report/ for this test>
+Screenshot       : <path to screenshot of expected condition — from reports/runs/<timestamp>/html-report/ or reports/screenshots/>
+Video Recording  : <path to video file embedded in reports/runs/<timestamp>/html-report/ for this test>
 Status           : <Open | Confirmed | Won't Fix>
 ────────────────────────────────────────────────────────────────
 
@@ -1360,22 +1360,22 @@ Status           : <Open | Confirmed | Won't Fix>
 
 | Artefact                                           | Location |
 |---|---|
-| User Story                                         | userstory/ecom-checkout.md |
+| User Story                                         | util/userstory/ecom-checkout.md |
 | Manual Test Cases                                  | Step 1 output (inline in prompt) |
-| Test Plan                                          | specs/ecom-checkout-test-plan.md |
+| Test Plan                                          | util/manual-tests/ecom-checkout-test-plan.md |
 | Test Data JSON                                     | tests/data/checkout-test-data.json |
-| Exploratory Testing Findings                       | specs/exploratory-testing-findings.md |
+| Exploratory Testing Findings                       | util/manual-tests/exploratory-testing-findings.md |
 | Automation — Page Objects                          | tests/pages/ |
 | Automation — Spec Files                            | tests/checkout/ |
-| Initial Run Report (JSON)                          | specs/test-results/initial-run-report.json |
-| Failure Triage                                     | specs/test-results/failure-triage.md |
-| Healing Log                                        | specs/test-results/healing-log.md |
-| Post-Healing Run Report (JSON)                     | specs/test-results/post-healing-run-report.json |
-| Screenshots (exploratory)                          | specs/screenshots/ |
-| Playwright HTML Report (screenshots + video embedded)  | playwright-report/ |
-| Per-test screenshots of expected (pass) condition  | playwright-report/ (embedded per test) |
-| Per-test video recordings                          | playwright-report/ (embedded per test) |
-| Per-test trace files                               | playwright-report/ (embedded per test) |
+| Initial Run Report (JSON)                          | reports/runs/<timestamp>/test-results.json |
+| Failure Triage                                     | reports/runs/<timestamp>/failure-triage.md |
+| Healing Log                                        | reports/runs/<timestamp>/healing-log.md |
+| Post-Healing Run Report (JSON)                     | reports/runs/<timestamp>/test-results.json |
+| Screenshots (exploratory)                          | reports/screenshots/ |
+| Playwright HTML Report (screenshots + video embedded)  | reports/runs/<timestamp>/html-report/ |
+| Per-test screenshots of expected (pass) condition  | reports/runs/<timestamp>/html-report/ (embedded per test) |
+| Per-test video recordings                          | reports/runs/<timestamp>/html-report/ (embedded per test) |
+| Per-test trace files                               | reports/runs/<timestamp>/html-report/ (embedded per test) |
 
 ### 6.2 Test Environment
 
@@ -1402,10 +1402,10 @@ Status           : <Open | Confirmed | Won't Fix>
 
 - No placeholder text (`<n>`, `<title>`, `…`) may remain in the final file — every field must be filled from actual data.
 - Every BUG-* reference in Sections 2 and 3 must have a corresponding full entry in Section 5.
-- Every HEAL-* reference in Section 3.3 must have a corresponding entry in `specs/test-results/healing-log.md`.
+- Every HEAL-* reference in Section 3.3 must have a corresponding entry in `reports/runs/<timestamp>/healing-log.md`.
 - Every automated test entry in the Playwright HTML report must have an embedded **screenshot of the expected final condition** (the state captured at test end, not just on failure).
 - Every automated test entry in the Playwright HTML report must have an embedded **video recording** of the full test execution.
-- The `playwright-report/` folder must exist and be accessible before the written report references it. If it does not exist, re-run the final test suite with the correct `playwright.config.ts` settings before writing the report.
+- The `reports/runs/<timestamp>/html-report/` folder must exist and be accessible before the written report references it. If it does not exist, re-run the final test suite with the correct `playwright.config.ts` settings before writing the report.
 - The Overall Status in Section 1 is determined as follows:
   - **PASS** — all tests pass, zero open defects.
   - **PASS WITH DEFECTS** — all tests pass or are `test.fail()` with logged bugs, at least one open defect exists.
@@ -1414,7 +1414,7 @@ Status           : <Open | Confirmed | Won't Fix>
 ### 7.6 Output File
 
 ```
-reports/test-results/test-report-<YYYY-MM-DD>.md
+reports/runs/<timestamp>/test-report-<YYYY-MM-DD>.md
 ```
 
 ---
@@ -1424,7 +1424,7 @@ reports/test-results/test-report-<YYYY-MM-DD>.md
 Before declaring the engagement complete, verify every item below. All items must be checked. If any item fails, return to the relevant step and resolve it before proceeding.
 
 ### Planning & Coverage
-- [ ] Every scenario from Section 2.3 has a corresponding test plan entry in `specs/ecom-checkout-test-plan.md`
+- [ ] Every scenario from Section 2.3 has a corresponding test plan entry in `util/manual-tests/ecom-checkout-test-plan.md`
 - [ ] Every test plan entry references a unique output file path under `tests/`
 - [ ] Every output file path uses kebab-case naming
 - [ ] Every test step in the plan maps to exactly one expected result
@@ -1441,18 +1441,18 @@ Before declaring the engagement complete, verify every item below. All items mus
 - [ ] All POM files exist as defined in Step 5 Section 5.3
 - [ ] No spec file contains inline `page.fill()` or `page.click()` calls — all actions go through page objects
 - [ ] No spec file contains `page.waitForTimeout()`
-- [ ] `reports/test-results/healing-log.md` has an entry for every fix applied in Step 6
-- [ ] `reports/test-results/post-healing-run-report.json` exists and shows no unexpected failures
+- [ ] `reports/runs/<timestamp>/healing-log.md` has an entry for every fix applied in Step 6
+- [ ] `reports/runs/<timestamp>/test-results.json` exists and shows no unexpected failures
 - [ ] No test is deleted, skipped, or commented out without a linked bug report
 - [ ] `playwright.config.ts` has `screenshot: 'on'`, `video: 'on'`, and `trace: 'on'`
-- [ ] `playwright-report/` folder exists and every test entry has an embedded screenshot, video, and trace
+- [ ] `reports/runs/<timestamp>/html-report/` folder exists and every test entry has an embedded screenshot, video, and trace
 - [ ] Every passing test body ends with a `captureScreenshot('<TestID>-expected-condition')` call
 
 ### Test Report
-- [ ] `reports/test-results/test-report-<YYYY-MM-DD>.md` exists and contains no unfilled placeholder values (`<n>`, `<title>`, `…`)
+- [ ] `reports/runs/<timestamp>/test-report-<YYYY-MM-DD>.md` exists and contains no unfilled placeholder values (`<n>`, `<title>`, `…`)
 - [ ] Every BUG-* referenced in the report has a full defect entry in Section 5 of the report
 - [ ] Every HEAL-* referenced in the report has a matching entry in `healing-log.md`
 - [ ] Report Overall Status reflects the actual final test suite outcome
 - [ ] All defect entries include a timestamp
-- [ ] Every defect entry has a `Video Recording` field pointing to the video in `playwright-report/`
-- [ ] The Appendix artefact index lists `playwright-report/` as the source for embedded screenshots and video recordings
+- [ ] Every defect entry has a `Video Recording` field pointing to the video in `reports/runs/<timestamp>/html-report/`
+- [ ] The Appendix artefact index lists `reports/runs/<timestamp>/html-report/` as the source for embedded screenshots and video recordings

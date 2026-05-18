@@ -62,7 +62,7 @@ Steps to Reproduce:
   3. Observe product images on the inventory page
 Actual Result    : All 6 product images display the same incorrect image (a dog/pug holding a tennis ball) instead of their respective product images (backpack, bike light, t-shirt, etc.)
 Expected Result  : Each product should display its own unique product image matching the product name
-Screenshot       : specs/screenshots/EX-01-problem-user-inventory.png
+Screenshot       : reports/screenshots/EX-01-problem-user-inventory.png
 User Story AC    : AC1 (Cart Review — product details should be visible and correct)
 Notes            : This is a known SauceDemo test scenario for problem_user. Consistent across all 3 observations. Does not affect checkout flow for other users.
 ───────────────────────────────────────────────
@@ -89,7 +89,7 @@ Actual Result    : The checkout overview page loads successfully showing:
   - Active "Finish" button that can be clicked to place a $0 "order"
   The user can click Finish and receive the "Thank you for your order!" confirmation without ever entering their name, address, or adding a product.
 Expected Result  : The application should redirect the user to /checkout-step-one.html or /cart.html if they attempt to access the overview page without going through the proper flow. At minimum, an empty cart should prevent reaching the overview.
-Screenshot       : specs/screenshots/EX-probe-direct-nav-step-two.png
+Screenshot       : reports/screenshots/EX-probe-direct-nav-step-two.png
 User Story AC    : AC2 (Checkout Information Entry must be completed before proceeding to overview)
 Notes            : Reproduced 3 times consistently. This is an application flow integrity issue. While SauceDemo is a test application, this represents a real-world vulnerability class (order flow bypass). The Finish button on the empty overview is fully functional.
 ───────────────────────────────────────────────
@@ -117,7 +117,7 @@ Actual Result    : The order confirmation page loads and displays:
   - "Back Home" button
   A full success confirmation is shown as if an order was placed, even though no product was added to cart and no checkout form was filled.
 Expected Result  : User should be redirected to /cart.html or /inventory.html if they attempt to access the confirmation page without completing a real order.
-Screenshot       : specs/screenshots/EX-probe-direct-nav-complete.png
+Screenshot       : reports/screenshots/EX-probe-direct-nav-complete.png
 User Story AC    : AC4 (Order Completion should only be shown after completing the full checkout flow)
 Notes            : Reproduced 3 times consistently. Related to BUG-02 — both indicate the application does not enforce checkout flow order. In a production system this could be exploited to generate fake confirmation emails or bypass payment.
 ───────────────────────────────────────────────

@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -37,6 +37,6 @@ test.describe('Navigation Flows', () => {
     // Cart badge should show 2
     expect(await inventoryPage.getCartBadgeCount()).toBe('2');
 
-    await page.screenshot({ path: 'specs/screenshots/nf-01-cancel-step-one-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/nf-01-cancel-step-one-pass.png' });
   });
 });

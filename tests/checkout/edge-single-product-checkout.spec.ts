@@ -1,4 +1,4 @@
-// spec: specs/ecom-checkout-test-plan.md
+// spec: util/manual-tests/ecom-checkout-test-plan.md
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
@@ -35,6 +35,6 @@ test.describe('Edge Cases', () => {
     await expect(page).toHaveURL(/checkout-complete\.html/);
     expect(await completePage.getConfirmationHeading()).toBe('Thank you for your order!');
 
-    await page.screenshot({ path: 'specs/screenshots/ec-03-single-product-checkout-pass.png' });
+    await page.screenshot({ path: 'reports/screenshots/ec-03-single-product-checkout-pass.png' });
   });
 });
