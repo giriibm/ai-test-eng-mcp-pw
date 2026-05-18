@@ -1,4 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
+import { defineBddConfig } from 'playwright-bdd';
+
+// Playwright-BDD Configuration
+const testDir = defineBddConfig({
+  paths: ['tests/bdd/features/**/*.feature'],
+  require: ['tests/bdd/steps/**/*.ts'],
+});
 
 /* Timestamp shared across all paths in this run — format: YYYY-MM-DD_HH-MM-SS */
 const ts = new Date()
@@ -61,6 +68,20 @@ export default defineConfig({
 
   /* Configure projects for UI and API tests */
   projects: [
+    // ========== BDD Smoke Tests ==========
+    {
+      name: 'BDD-Smoke',
+      testDir: '.features-gen',
+      testMatch: /.*\.feature\.spec\.js/,  // BDD generates .feature.spec.js files
+      use: {
+        ...devices['Desktop Chrome'],
+        // BDD tests include both UI and API
+        screenshot: 'on',
+        video: 'on',
+        trace: 'on',
+      },
+    },
+
     // ========== UI Tests ==========
     {
       name: 'UI-Chrome',

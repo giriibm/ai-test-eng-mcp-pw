@@ -7,18 +7,28 @@
     "test": "playwright test",
     "test:ui": "playwright test tests/ui",
     "test:api": "playwright test tests/api",
+    "test:bdd": "bddgen test && playwright test --project=BDD-Smoke",
+    "test:bdd:ui": "bddgen test && playwright test .features-gen/tests/bdd/features/ui",
+    "test:bdd:api": "bddgen test && playwright test .features-gen/tests/bdd/features/api",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
     "test:ui-mode": "playwright test --ui",
     "test:list": "playwright test --list"
   },
-  "keywords": ["playwright", "testing", "e2e", "api", "automation"],
+  "keywords": [
+    "playwright",
+    "testing",
+    "e2e",
+    "api",
+    "automation"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.59.1",
-    "@types/node": "^25.6.2"
+    "@types/node": "^25.6.2",
+    "playwright-bdd": "^8.5.1"
   }
 }

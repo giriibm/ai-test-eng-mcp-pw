@@ -21,6 +21,11 @@ package-lock.json
 /playwright/.auth/
 
 # ──────────────────────────────────────────────
+# Playwright-BDD — generated test files
+# ──────────────────────────────────────────────
+.features-gen/
+
+# ──────────────────────────────────────────────
 # Reports — entire folder excluded from version control
 # All run artifacts, HTML reports, JSON results,
 # and screenshots stay local only.
