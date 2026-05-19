@@ -8,7 +8,7 @@ import { CartPage } from '../pages/CartPage';
 import { CheckoutStepOnePage } from '../pages/CheckoutStepOnePage';
 import { STANDARD_USER } from '../helpers/TestDataHelper';
 
-test.describe('Negative — Validation Errors', () => {
+test.describe('Negative — Validation Errors (NE-06)', () => {
   test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
@@ -29,13 +29,9 @@ test.describe('Negative — Validation Errors', () => {
     await stepOnePage.fillInfo(longString, longString, longString);
     await stepOnePage.continue();
 
-    // Verify no crash — page should still be usable
-    const currentUrl = page.url();
-    expect(
-      currentUrl.includes('/checkout-step-one.html') || currentUrl.includes('/checkout-step-two.html')
-    ).toBe(true);
-    await expect(page.locator('body')).toBeVisible();
-
-    await page.screenshot({ path: 'reports/screenshots/ne-06-long-strings-pass.png' });
+    // SauceDemo accepts long strings and advances — assert step two rendered correctly
+    await expect(page).toHaveURL(/checkout-step-two\.html/);
+    await expect(page.locator('[data-test="checkout-summary-container"]')).toBeVisible();
+    await expect(page.locator('[data-test="finish"]')).toBeVisible();
   });
 });

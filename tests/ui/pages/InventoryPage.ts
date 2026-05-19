@@ -24,11 +24,19 @@ export class InventoryPage extends BasePage {
     await this.addBoltTShirtButton.click();
   }
 
+  async addItemToCart(productName: string): Promise<void> {
+    const slug = productName.toLowerCase().replace(/\s+/g, '-');
+    await this.page.locator(`[data-test="add-to-cart-${slug}"]`).click();
+  }
+
   async goToCart(): Promise<void> {
     await this.cartLink.click();
   }
 
   async getCartBadgeCount(): Promise<string> {
-    return (await this.cartBadge.textContent()) ?? '0';
+    if (await this.cartBadge.isVisible()) {
+      return (await this.cartBadge.textContent()) ?? '0';
+    }
+    return '0';
   }
 }

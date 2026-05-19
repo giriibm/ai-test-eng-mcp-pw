@@ -1,9 +1,9 @@
 # AI QA Agent — Playwright Test Automation Suite
 
-A comprehensive AI-driven QA automation framework featuring **57 automated tests**:
+A comprehensive AI-driven QA automation framework featuring **57 automated tests** (or **11 tests** in demo mode — see [Generation Mode](#generation-mode)):
 - **UI Testing**: E2E test pipeline that reads user stories, generates manual test cases, builds structured test plans, performs exploratory testing, and produces self-healing Page Object Model (POM) test suites (17 tests)
-- **API Testing**: Professional API test automation with service layer architecture, covering authentication, CRUD operations, and end-to-end workflows (37 tests)
-- **BDD Smoke Tests**: Behavior-Driven Development tests using Gherkin syntax for quick validation and demo purposes (3 tests)
+- **API Testing**: Professional API test automation with service layer architecture, covering authentication, CRUD operations, and end-to-end workflows — with built-in run, triage, and self-heal step (37 tests)
+- **BDD Smoke Tests**: Behavior-Driven Development tests using Gherkin syntax for quick validation and demo purposes — with built-in run, triage, and self-heal step (3 tests)
 
 ---
 
@@ -25,15 +25,16 @@ The UI testing pipeline is split into five sequential parts, each driven by a de
 
 ### API Testing Pipeline
 
-The API testing follows a comprehensive, production-ready approach:
+A single prompt (`api-test-automation-prompt.md`) drives the entire API pipeline end-to-end, including a final self-heal loop:
 
 | Phase | Description | Output |
 |-------|-------------|--------|
-| 1 | Manual Test Case Design | 32 documented test cases in `util/manual-tests/api-manual-test-cases.md` |
-| 2 | Service Layer Implementation | BaseApiClient, AuthService, BookingService in `helpers/api/` |
-| 3 | Test Data Management | Centralized test data with type safety in `test-data/api/` |
-| 4 | Test Automation | 37 automated tests across auth, CRUD, and E2E scenarios |
-| 5 | Execution & Reporting | 100% passing tests with HTML reports and traces |
+| 1 | Pre-flight | `npm install` + `npx playwright install --with-deps` |
+| 2 | Manual Test Case Design | 32 documented test cases in `util/manual-tests/api-manual-test-cases.md` |
+| 3 | Service Layer Implementation | `BaseApiClient`, `AuthService`, `BookingService` in `helpers/api/` |
+| 4 | Test Data Management | Centralized test data with type safety in `test-data/api/` |
+| 5 | Test Automation | 37 automated tests across auth, CRUD, and E2E scenarios |
+| 6 | Run, Triage & Self-Heal | Run suite → triage any failures → fix → re-run until 100% pass → save report |
 
 **Key Features**:
 - ✅ Service layer pattern for clean, maintainable code
@@ -41,23 +42,28 @@ The API testing follows a comprehensive, production-ready approach:
 - ✅ 37 automated tests (116% coverage of manual test cases)
 - ✅ Authentication, CRUD operations, and E2E workflows
 - ✅ Parallel execution with 6 workers
-- ✅ Comprehensive documentation and examples
+- ✅ Built-in self-heal loop — exits only when all tests pass
 
 ### BDD Smoke Testing
 
-The BDD smoke tests provide quick validation using business-readable Gherkin syntax:
+A single prompt (`bdd-test-automation-prompt.md`) drives the entire BDD pipeline end-to-end, including a final self-heal loop:
 
-| Feature | Scenarios | Execution Time |
-|---------|-----------|----------------|
-| E-commerce Checkout | 2 UI scenarios | ~4s |
-| Booking API Lifecycle | 1 API scenario | ~5s |
+| Step | Description | Output |
+|------|-------------|--------|
+| 0 | Pre-flight | `npm install` + `npx playwright install --with-deps` |
+| 1 | Fixtures | `fixtures/bdd-fixtures.ts` |
+| 2 | Config | `BDD-Smoke` project added to `playwright.config.ts` |
+| 3 | Page Object stubs | Creates `tests/ui/pages/` stubs if UI pipeline has not run yet |
+| 4 | Feature Files | Gherkin `.feature` files in `tests/bdd/features/` |
+| 5 | Step Definitions | TypeScript step files in `tests/bdd/steps/` |
+| 6 | Run, Triage & Self-Heal | Run suite → triage any failures → fix → re-run until 3/3 pass → save report |
 
 **Key Features**:
 - ✅ Gherkin syntax readable by non-technical stakeholders
-- ✅ Reuses existing Page Objects and API Services
-- ✅ Fast execution (< 6 seconds for 3 critical paths)
+- ✅ Reuses existing Page Objects and API Services when available; creates stubs when they don't exist yet
+- ✅ Fast execution (< 30 seconds for 3 critical paths)
 - ✅ playwright-bdd framework integration
-- ✅ Perfect for CI/CD smoke testing and demos
+- ✅ Built-in self-heal loop — exits only when all tests pass
 - ✅ Living documentation as executable specifications
 
 ---
@@ -92,7 +98,10 @@ The playwright-test-healer agent:
 
 ### API Testing Implementation
 
-#### Phase 1 — Manual Test Design
+#### Phase 1 — Pre-flight
+Run `npm install` and `npx playwright install --with-deps` before any generation.
+
+#### Phase 2 — Manual Test Design
 Document comprehensive test scenarios in `util/manual-tests/api-manual-test-cases.md`:
 - Authentication tests (valid/invalid credentials)
 - CRUD operations (Create, Read, Update, Delete bookings)
@@ -100,29 +109,30 @@ Document comprehensive test scenarios in `util/manual-tests/api-manual-test-case
 - Authorization tests (with/without auth)
 - Negative test cases
 
-#### Phase 2 — Service Layer Implementation
+#### Phase 3 — Service Layer Implementation
 Build reusable API service classes following the service layer pattern:
 - `BaseApiClient.ts`: Core HTTP methods (GET, POST, PUT, PATCH, DELETE)
 - `AuthService.ts`: Token generation, cookie/header management
 - `BookingService.ts`: All booking CRUD operations with filtering
 
-#### Phase 3 — Test Data Management
+#### Phase 4 — Test Data Management
 Create centralized, type-safe test data in `test-data/api/booking-test-data.ts`:
 - Authentication credentials (valid/invalid)
 - Booking templates (complete, minimum, special chars, edge cases)
 - Helper functions for dynamic data generation
 
-#### Phase 4 — Test Automation
-Implement automated tests organized by functionality:
+#### Phase 5 — Test Automation
+Implement automated tests organised by functionality:
 - `tests/api/auth/`: Authentication endpoint tests (4 tests)
 - `tests/api/booking/`: CRUD operation tests (29 tests)
 - `tests/api/e2e/`: End-to-end workflow tests (4 tests)
 
-#### Phase 5 — Execution & Validation
-Run tests with parallel execution, generate reports:
-- All 37 tests passing (100% success rate)
-- HTML reports with traces and screenshots
-- Timestamped test artifacts for debugging
+#### Phase 6 — Run, Triage & Self-Heal
+1. Run `npm run test:api`
+2. For each failure, identify root cause from the triage table in the prompt (auth errors, 404s, type errors, cleanup failures)
+3. Apply fixes and re-run
+4. Repeat until all 37 tests pass
+5. Save timestamped report to `reports/runs/<timestamp>/test-report-api-<YYYY-MM-DD>.md`
 
 ---
 
@@ -222,16 +232,17 @@ Run tests with parallel execution, generate reports:
 
 ## Applications Under Test
 
+> The single source of truth for all application URLs, credentials, selector strategy, and known behaviours is **`util/prompts/aut-config.md`**. To change the application under test, update only that file.
+
 ### UI Testing
-**URL**: https://www.saucedemo.com  
+**URL**: see `util/prompts/aut-config.md` Section 1  
 **Feature**: E-commerce checkout flow (cart → shipping info → order review → confirmation)  
-**Credentials**: `standard_user` / `secret_sauce`
+**Credentials**: see `util/prompts/aut-config.md` Section 1
 
 ### API Testing
-**URL**: https://restful-booker.herokuapp.com  
-**API**: Restful-Booker API (Hotel booking REST API)  
-**Documentation**: https://restful-booker.herokuapp.com/apidoc/index.html  
-**Auth**: Token-based and Basic Auth (`admin` / `password123`)
+**URL**: see `util/prompts/aut-config.md` Section 2  
+**API**: see `util/prompts/aut-config.md` Section 2  
+**Auth**: see `util/prompts/aut-config.md` Section 2
 
 ---
 
@@ -362,6 +373,133 @@ npx bddgen test
 Screenshots, videos, and traces are captured for UI and BDD tests. Additional browsers (Firefox, Safari) are available but can be enabled/disabled in the config as needed.
 
 Environment variables (e.g., API keys for MCP tools) are stored in `.env`, which is excluded from version control via `.gitignore`.
+
+---
+
+## Generation Mode
+
+`util/prompts/aut-config.md` Section 6 controls how many tests are generated when you run the prompts.
+
+```
+mode: demo    ← generate a focused demo suite  (5 UI + 3 API + 3 BDD = 11 tests)
+mode: full    ← generate the full regression suite  (17 UI + 37 API + 3 BDD = 57 tests)
+```
+
+This is the **only field you need to change**. No other file needs editing.
+
+### Demo Suite Scope (`mode: demo`)
+
+When `mode: demo`, each prompt generates the minimum representative set:
+
+| Suite | Count | Scenarios |
+|---|---|---|
+| UI | 5 | Happy Path checkout, All-fields-empty negative, One-product edge case, Back-to-home navigation, Cart page UI validation |
+| API | 3 spec files | `auth.spec.ts` (token generation), `create-booking.spec.ts` (happy path), `complete-lifecycle.spec.ts` (full lifecycle) |
+| BDD | 3 | All 3 BDD scenarios — already the minimum smoke scope, no reduction applied |
+
+The demo suite runs in under 30 seconds and is ideal for showing the framework to stakeholders, CI smoke runs, or onboarding.
+
+### Switching Between Modes
+
+1. Open `util/prompts/aut-config.md`
+2. Change the one line in Section 6: `mode: demo` ↔ `mode: full`
+3. Delete generated code and re-run the prompts (see [Regenerating the Test Suite](#regenerating-the-test-suite))
+
+---
+
+## Regenerating the Test Suite
+
+The entire test suite can be deleted and regenerated from the prompt files at any time. The prompt files and `package.json` are the only things you need to keep. Everything else — including `playwright.config.ts` — is regenerated by the prompts.
+
+### What to Delete (generated code)
+
+```
+tests/            ← all spec files, page objects, BDD features & steps
+helpers/api/      ← API service layer (AuthService, BaseApiClient, BookingService)
+test-data/        ← API test data constants & generators
+fixtures/         ← bdd-fixtures.ts
+playwright.config.ts  ← config file (fully regenerated by Part 4)
+```
+
+### What to Keep (inputs & config)
+
+| Item | Why keep it |
+|---|---|
+| `util/prompts/aut-config.md` | Single source of truth — drives all prompts |
+| `util/prompts/e2e-qa-prompt-part*.md` | UI pipeline prompt files |
+| `util/prompts/api-test-automation-prompt.md` | API prompt file |
+| `util/prompts/bdd-test-automation-prompt.md` | BDD prompt file |
+| `util/userstory/ecom-checkout.md` | Input to Part 1 — the user story |
+| `package.json` | Dependency list — needed for `npm install` to work |
+| `.env` | API keys for MCP server tools — never regenerated |
+| `.playwright-mcp/` | MCP server config — never regenerated |
+| `.github/` | CI/CD workflows — optional but not regenerated |
+
+> `util/manual-tests/` (manual test cases, test plan) are intermediate artifacts. They are regenerated by Parts 1-3 but can be kept to skip those parts.
+
+### Step-by-step Regeneration
+
+The three pipelines are **independent** — run them in any order. Common orderings:
+
+| Order | When to use |
+|---|---|
+| UI (Parts 1–5) → API → BDD | Default — BDD reuses the finished page objects |
+| API → BDD → UI (Parts 1–5) | API-first projects; BDD creates minimal page object stubs that UI pipeline later overwrites |
+| API only | API testing only, no UI or BDD needed |
+| UI only | UI testing only, no API or BDD needed |
+| BDD only | Smoke tests only; BDD prompt creates minimal page objects and API services itself |
+
+> The only hard constraint is **within** the UI pipeline: Parts must run 1 → 2 → 3 → 4 → 5 in order.
+
+```bash
+# 1. Delete all generated code
+rm -rf tests/ helpers/api/ test-data/ fixtures/ playwright.config.ts
+
+# ── Option A: UI → API → BDD (default) ────────────────────────────────────────
+
+# 2a. Run UI pipeline Parts 1–5 in order
+#     Part 1 → Playwright MCP Server agent  (pre-flight + manual test cases)
+#     Part 2 → Playwright Test Planner agent  (test plan with verified selectors)
+#     Part 3 → Playwright MCP Server agent  (exploratory testing findings)
+#     Part 4 → playwright-test-generator agent  (playwright.config.ts + all UI tests)
+#     Part 5 → playwright-test-healer agent  (run → triage → fix → report)
+
+# 2b. Run API prompt  (pre-flight + service layer + 37 tests + self-heal)
+#     Open util/prompts/api-test-automation-prompt.md in the default agent
+
+# 2c. Run BDD prompt  (pre-flight + fixtures + feature files + step defs + self-heal)
+#     Open util/prompts/bdd-test-automation-prompt.md in the default agent
+#     BDD reuses the page objects created by Part 4
+
+# ── Option B: API → BDD → UI ──────────────────────────────────────────────────
+
+# 2a. Run API prompt  (creates helpers/api/, test-data/, tests/api/, playwright.config.ts)
+# 2b. Run BDD prompt  (Step 3b auto-creates minimal page object stubs if tests/ui/pages/ is missing)
+# 2c. Run UI pipeline Parts 1–5  (overwrites the stubs with production-grade page objects)
+
+# ── Option C: standalone pipelines ────────────────────────────────────────────
+
+# API only:  run api-test-automation-prompt.md  →  37 tests
+# UI only:   run Parts 1–5  →  17 tests
+# BDD only:  run bdd-test-automation-prompt.md  →  3 tests (creates its own stubs)
+
+# ── Verify everything ─────────────────────────────────────────────────────────
+npm test           # UI + API (57 tests)
+npm run test:bdd   # BDD smoke (3 tests)
+```
+
+### Switching to a Different Application Under Test
+
+1. Edit **`util/prompts/aut-config.md`** — this is the only file you need to change:
+   - **Section 0**: set `appSlug` (e.g. `my-new-app`) and `userStoryFile` (path to your user story)
+   - **Section 1**: new UI app URL, credentials, selector strategy, known behaviours
+   - **Section 2**: new API base URL, auth credentials, endpoints, known behaviours
+   - **Section 3**: update BDD scope to match the new app's key flows
+   - **Section 6**: optionally set `mode: demo` to generate a small representative suite first, then switch to `mode: full` for full coverage
+2. Delete all generated code: `rm -rf tests/ helpers/api/ test-data/ fixtures/ playwright.config.ts`
+3. Replace `util/userstory/ecom-checkout.md` with your new user story (use the path set in Section 0)
+4. Re-run all 7 prompts in the order shown above — they will read `aut-config.md` and use your new app slug, URLs, and credentials everywhere.
+5. No other file needs to change.
 
 ---
 

@@ -8,7 +8,7 @@ import { CartPage } from '../pages/CartPage';
 import { CheckoutStepOnePage } from '../pages/CheckoutStepOnePage';
 import { STANDARD_USER } from '../helpers/TestDataHelper';
 
-test.describe('Negative — Validation Errors', () => {
+test.describe('Negative — Validation Errors (NE-05)', () => {
   test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
@@ -28,12 +28,9 @@ test.describe('Negative — Validation Errors', () => {
     await stepOnePage.fillInfo('!@#$%', '^&*()', '<>?/{}');
     await stepOnePage.continue();
 
-    // Verify no crash — either an error is shown or step two loads
-    const currentUrl = page.url();
-    expect(
-      currentUrl.includes('/checkout-step-one.html') || currentUrl.includes('/checkout-step-two.html')
-    ).toBe(true);
-
-    await page.screenshot({ path: 'reports/screenshots/ne-05-special-chars-pass.png' });
+    // SauceDemo accepts special characters and advances — assert step two rendered correctly
+    await expect(page).toHaveURL(/checkout-step-two\.html/);
+    await expect(page.locator('[data-test="checkout-summary-container"]')).toBeVisible();
+    await expect(page.locator('[data-test="finish"]')).toBeVisible();
   });
 });

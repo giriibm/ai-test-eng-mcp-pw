@@ -1,10 +1,5 @@
 # E2E QA Prompt — Part 5 of 5: Test Healing & Final Report
 
-> **Before starting: read `util/prompts/aut-config.md`.**
-> That file is the single source of truth for the application URL, credentials, selector strategy, and known behaviours. Use those values everywhere in this prompt. Do not hardcode URLs or credentials.
->
-> **File path substitution**: This prompt uses `ecom-checkout` as the default app slug in all file names. Read the actual `appSlug` from `util/prompts/aut-config.md` Section 0 and substitute it everywhere before proceeding.
-
 **Part** : 5 of 5 | **Agent** : playwright-test-healer | **Steps covered** : Steps 6–7 + Final Checklist
 
 ---

@@ -3,31 +3,6 @@
 > **Before starting: read `util/prompts/aut-config.md`.**
 > That file is the single source of truth for both the UI and API application URLs, credentials, and known behaviours. Use those values everywhere. Do not hardcode URLs or credentials.
 
----
-
-## Pre-flight: Environment Setup
-
-Before generating any files, ensure the project environment is ready. Run these commands once in the terminal:
-
-```bash
-# 1. Install all npm dependencies (@playwright/test, playwright-bdd, TypeScript types, etc.)
-npm install
-
-# 2. Download Playwright browsers and OS-level dependencies
-npx playwright install --with-deps
-
-# 3. Verify Playwright is working
-npx playwright --version
-```
-
-Check that the following exist — do NOT delete them, they configure the AI tooling:
-- `.env` — API keys for the MCP server tools
-- `.playwright-mcp/` — MCP server configuration folder
-
-If any tool call fails during generation, re-run `npm install` and `npx playwright install --with-deps` before retrying.
-
----
-
 ## Objective
 Create a focused Behavior-Driven Development (BDD) smoke test suite using Gherkin syntax and playwright-bdd framework. This suite serves as a quick validation of critical functionality for demo and CI/CD pipelines.
 
@@ -85,9 +60,6 @@ util/prompts/
 ---
 
 ## Test Coverage Requirements
-
-> **Check `util/prompts/aut-config.md` Section 6.**
-> The BDD suite is already a minimal smoke scope (3 scenarios). Generate all 3 scenarios in both `demo` and `full` mode.
 
 ### UI Smoke Tests (2 tests)
 
@@ -232,27 +204,6 @@ Add to `package.json`:
 ```
 
 > Note: `bddgen` generates test files only. `playwright test` runs them separately. Never use `bddgen test` (which would run tests twice).
-
-### Step 3b: Create UI Page Objects if they don't exist
-
-> **Check before proceeding**: does `tests/ui/pages/` exist with at least `LoginPage.ts`, `InventoryPage.ts`, and `CartPage.ts`?
->
-> - **Yes** (UI pipeline has already been run) → skip this step entirely.
-> - **No** (running BDD before UI pipeline) → create the minimum page objects below so the UI step definitions compile and run.
-
-If the files don't exist, create these four files using URL and credentials from `util/prompts/aut-config.md` Section 1:
-
-**`tests/ui/pages/BasePage.ts`** — base class with `goto(url)` and a protected `page` reference.
-
-**`tests/ui/pages/LoginPage.ts`** — methods: `goto(url)`, `login(username, password)`. Use `data-test` selectors: `[data-test="username"]`, `[data-test="password"]`, `[data-test="login-button"]`.
-
-**`tests/ui/pages/InventoryPage.ts`** — methods: `addFirstItemToCart()`, `goToCart()`. Selectors: `[data-test="add-to-cart-sauce-labs-backpack"]`, `[data-test="shopping-cart-link"]`.
-
-**`tests/ui/pages/CartPage.ts`** — methods: `getCartItems()`, `continueShopping()`. Selectors: `[data-test="cart-list"]`, `[data-test="continue-shopping"]`.
-
-> These are the minimal stubs needed for the 2 BDD UI scenarios. When you later run the full UI pipeline (Parts 1–5), it will overwrite these files with the complete, production-grade versions — no conflict.
-
----
 
 ### Step 4: Create Feature Files
 Create Gherkin feature files in `tests/bdd/features/` following the scenarios above.
@@ -474,48 +425,6 @@ When demonstrating these BDD smoke tests:
 - ✅ Business stakeholders can read and understand feature files
 - ✅ Successfully integrated into CI/CD pipeline
 - ✅ Demo-ready with clean, professional output
-
----
-
-## Final Step — Run, Triage, and Self-Heal
-
-After all files are generated, follow this loop until every test passes:
-
-### 1. Generate BDD test files and run the suite
-```bash
-npm run test:bdd
-```
-
-### 2. If any tests fail — triage each failure
-
-For every failing test, identify the root cause from the error output:
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `Step not found` / `Undefined step` | Step text in `.feature` doesn't match any step definition | Fix the step text to match exactly, or add the missing step definition |
-| `Cannot find module '...fixtures/bdd-fixtures'` | Wrong relative import path in step definition | Count the `../` levels from the step file up to the workspace root |
-| `page.goto` / selector not found | Page Object selector has drifted | Open the app in browser, inspect the element, update the selector in the Page Object |
-| `401 Unauthorized` in API scenario | Auth token not obtained before steps run | Ensure `Given authentication token is obtained` step calls `AuthService.createToken()` |
-| `Cannot read properties of undefined` | Fixture not injected or step context not shared | Verify `createBdd(test)` uses the custom `test` from `fixtures/bdd-fixtures.ts`; check fixture scope |
-| `bddgen` generates no files | Feature file path not matching `features` glob in config | Check `playwright-bdd.config.ts` `features` pattern matches `tests/bdd/features/**/*.feature` |
-
-### 3. Apply fixes, then re-run
-```bash
-npm run test:bdd
-```
-
-### 4. Repeat until output shows
-```
-3 passed
-```
-
-### 5. Write a test report
-
-Save a brief report to `reports/runs/<YYYY-MM-DD_HH-MM-SS>/test-report-bdd-<YYYY-MM-DD>.md` containing:
-- Date and total tests run
-- Pass / fail count
-- List of any tests that needed fixing and what was changed
-- Final status: `PASS` or `FAIL`
 
 ---
 

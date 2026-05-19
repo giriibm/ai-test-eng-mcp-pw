@@ -107,12 +107,7 @@ Fail Criteria    : <what constitutes a fail — any assertion breaks or unexpect
 
 ### 1.3 Required test case categories
 
-> **Check `util/prompts/aut-config.md` Section 6 BEFORE generating test cases.**
->
-> - If `mode: full` → derive ALL test cases from the user story, covering every category below.
-> - If `mode: demo` → derive ONLY the 5 scenarios listed in Section 6 "UI Tests — 5 scenarios". Stop after those 5. Do not generate additional cases.
-
-When `mode: full`, you MUST produce at least one test case for each of the following categories:
+You MUST produce at least one test case for each of the following categories:
 
 | Category | Description |
 |---|---|
@@ -122,16 +117,6 @@ When `mode: full`, you MUST produce at least one test case for each of the follo
 | Edge Case / Boundary | Minimum/maximum length values, single-character inputs, numeric limits |
 | Navigation Flow | Back button, Cancel button, direct URL access, mid-flow navigation |
 | UI Element Validation | Labels, placeholders, buttons, error banners, visual confirmations |
-
-When `mode: demo`, produce ONLY these 5 test cases (one per row, in this order):
-
-| # | Category | Scenario |
-|---|---|---|
-| 1 | Happy Path | Complete checkout end-to-end |
-| 2 | Negative | Submit form with all fields empty |
-| 3 | Edge Case | Cart with exactly one product |
-| 4 | Navigation | Back to home after completing order |
-| 5 | UI Validation | Verify all cart page UI elements are visible |
 
 ### 1.4 Save Location
 

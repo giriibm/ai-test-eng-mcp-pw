@@ -3,31 +3,6 @@
 > **Before starting: read `util/prompts/aut-config.md`.**
 > That file is the single source of truth for the API base URL, credentials, endpoint list, auth mechanism, and known behaviours. Use those values everywhere. Do not hardcode URLs or credentials.
 
----
-
-## Pre-flight: Environment Setup
-
-Before generating any files, ensure the project environment is ready. Run these commands once in the terminal:
-
-```bash
-# 1. Install all npm dependencies (@playwright/test, playwright-bdd, TypeScript types, etc.)
-npm install
-
-# 2. Download Playwright browsers and OS-level dependencies
-npx playwright install --with-deps
-
-# 3. Verify Playwright is working
-npx playwright --version
-```
-
-Check that the following exist — do NOT delete them, they configure the AI tooling:
-- `.env` — API keys for the MCP server tools
-- `.playwright-mcp/` — MCP server configuration folder
-
-If any tool call fails during generation, re-run `npm install` and `npx playwright install --with-deps` before retrying.
-
----
-
 ## Objective
 Create a comprehensive, production-ready API test automation suite for the Restful-Booker API using Playwright Test framework with TypeScript.
 
@@ -112,11 +87,6 @@ util/manual-tests/          # Documentation
 ---
 
 ## Test Coverage Requirements
-
-> **Check `util/prompts/aut-config.md` Section 6 BEFORE generating any test files.**
->
-> - If `mode: full` → generate ALL tests listed below (37 tests across 6 spec files).
-> - If `mode: demo` → generate ONLY the 3 spec files listed in Section 6 "API Tests — 3 spec files": `auth.spec.ts` (TC-AUTH-001 only), `create-booking.spec.ts` (TC-BOOKING-001 only), `complete-lifecycle.spec.ts` (TC-E2E-001 only). Skip all other spec files.
 
 ### 1. Authentication Tests (4 tests)
 - TC-AUTH-001: Generate auth token with valid credentials
@@ -616,46 +586,3 @@ This prompt will generate a **production-ready, enterprise-grade API test automa
 - 100% test success rate
 
 **Status**: Ready for production use and continuous integration.
-
----
-
-## Final Step — Run, Triage, and Self-Heal
-
-After all files are generated, follow this loop until every test passes:
-
-### 1. Run the full API suite
-```bash
-npm run test:api
-```
-
-### 2. If any tests fail — triage each failure
-
-For every failing test, identify the root cause from the error output:
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `401 Unauthorized` | Auth token not generated or expired | Check `AuthService.createToken()` is called in `beforeAll`; verify credentials in `aut-config.md` |
-| `404 Not Found` | Wrong endpoint path or booking ID not set | Check `BookingService` method URL; ensure `bookingId` is stored after create |
-| `TypeScript compile error` | Type mismatch or missing import | Fix the type annotation or add the missing import |
-| `Cannot read properties of undefined` | API response structure differs from expected | Log the raw response body and update the interface / assertion |
-| `afterEach cleanup failed` | Booking already deleted by the test itself | Wrap delete in `try/finally`; guard with `if (bookingId)` |
-| `Timeout` | API is slow or network issue | Increase `timeout` in the specific test; retry once |
-
-### 3. Apply fixes, then re-run
-```bash
-npm run test:api
-```
-
-### 4. Repeat until output shows
-```
-37 passed
-```
-
-### 5. Write a test report
-
-Save a brief report to `reports/runs/<YYYY-MM-DD_HH-MM-SS>/test-report-api-<YYYY-MM-DD>.md` containing:
-- Date and total tests run
-- Pass / fail count
-- List of any tests that needed fixing and what was changed
-- Final status: `PASS` or `FAIL`
-

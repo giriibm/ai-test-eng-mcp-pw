@@ -4,6 +4,7 @@
  */
 import { expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
+import { test } from '../../../../fixtures/bdd-fixtures';
 import { LoginPage } from '../../../ui/pages/LoginPage';
 import { InventoryPage } from '../../../ui/pages/InventoryPage';
 import { CartPage } from '../../../ui/pages/CartPage';
@@ -11,7 +12,7 @@ import { CheckoutStepOnePage } from '../../../ui/pages/CheckoutStepOnePage';
 import { CheckoutStepTwoPage } from '../../../ui/pages/CheckoutStepTwoPage';
 import { CheckoutCompletePage } from '../../../ui/pages/CheckoutCompletePage';
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(test);
 
 // ====================
 // Given Steps
@@ -24,9 +25,7 @@ Given('the user navigates to SauceDemo application', async ({ page }) => {
 Given('the user is logged in as {string} with password {string}', async ({ page }, username: string, password: string) => {
   const loginPage = new LoginPage(page);
   await loginPage.login(username, password);
-  
-  // Wait for inventory page to load
-  await page.waitForSelector('[data-test="inventory-list"]');
+  await expect(page.locator('[data-test="inventory-list"]')).toBeVisible();
 });
 
 // ====================
@@ -35,38 +34,19 @@ Given('the user is logged in as {string} with password {string}', async ({ page 
 
 When('the user adds {string} to cart', async ({ page }, productName: string) => {
   const inventoryPage = new InventoryPage(page);
-  
-  // Map product names to methods
-  switch (productName) {
-    case 'Sauce Labs Backpack':
-      await inventoryPage.addBackpack();
-      break;
-    case 'Sauce Labs Bike Light':
-      await inventoryPage.addBikeLight();
-      break;
-    case 'Sauce Labs Bolt T-Shirt':
-      await inventoryPage.addBoltTShirt();
-      break;
-    default:
-      // Generic add button by product name
-      await page.locator(`button[data-test*="add-to-cart-${productName.toLowerCase().replace(/\s+/g, '-')}"]`).click();
-  }
+  await inventoryPage.addItemToCart(productName);
 });
 
 When('the user navigates to cart page', async ({ page }) => {
   const inventoryPage = new InventoryPage(page);
   await inventoryPage.goToCart();
-  
-  // Wait for cart page to load
-  await page.waitForSelector('[data-test="cart-list"]');
+  await expect(page.locator('[data-test="cart-list"]')).toBeVisible();
 });
 
 When('the user proceeds to checkout', async ({ page }) => {
   const cartPage = new CartPage(page);
   await cartPage.checkout();
-  
-  // Wait for checkout page to load
-  await page.waitForSelector('[data-test="checkout-info-container"]');
+  await expect(page.locator('[data-test="checkout-info-container"]')).toBeVisible();
 });
 
 When('the user enters shipping information with firstName {string}, lastName {string}, zipCode {string}', 
@@ -78,17 +58,13 @@ When('the user enters shipping information with firstName {string}, lastName {st
 When('the user continues to order review', async ({ page }) => {
   const checkoutPage = new CheckoutStepOnePage(page);
   await checkoutPage.continue();
-  
-  // Wait for review page to load
-  await page.waitForSelector('[data-test="checkout-summary-container"]');
+  await expect(page.locator('[data-test="checkout-summary-container"]')).toBeVisible();
 });
 
 When('the user completes the order', async ({ page }) => {
   const reviewPage = new CheckoutStepTwoPage(page);
   await reviewPage.finish();
-  
-  // Wait for confirmation page to load
-  await page.waitForSelector('[data-test="checkout-complete-container"]');
+  await expect(page.locator('[data-test="checkout-complete-container"]')).toBeVisible();
 });
 
 When('the user clicks {string} button', async ({ page }, buttonText: string) => {

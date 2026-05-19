@@ -1,10 +1,5 @@
 # E2E QA Prompt — Part 2 of 5: E2E Test Plan
 
-> **Before starting: read `util/prompts/aut-config.md`.**
-> That file is the single source of truth for the application URL, credentials, selector strategy, and known behaviours. Use those values everywhere in this prompt. Do not hardcode URLs or credentials.
->
-> **File path substitution**: This prompt uses `ecom-checkout` as the default app slug in all file names. Read the actual `appSlug` from `util/prompts/aut-config.md` Section 0 and substitute it everywhere before proceeding.
-
 **Part** : 2 of 5 | **Agent** : Playwright Test Planner | **Step covered** : Step 2
 
 ---
@@ -56,8 +51,8 @@ Using the manual test cases in `util/manual-tests/manual-test-cases.md` (produce
 The agent must:
 
 1. Navigate to the application under test:
-   - **URL**: read from `util/prompts/aut-config.md` Section 1 (UI Base URL)
-   - **Credentials**: read from `util/prompts/aut-config.md` Section 1 (UI credentials)
+   - **URL**: `https://www.saucedemo.com`
+   - **Credentials**: username `standard_user` / password `secret_sauce`
 
 2. Visually inspect each page involved in the checkout flow (login, products, cart, checkout-step-one, checkout-step-two, checkout-complete) before writing any test step, so that selectors and element labels are accurate.
 

@@ -1,10 +1,5 @@
 # E2E QA Prompt — Part 1 of 5: Manual Test Cases
 
-> **Before starting: read `util/prompts/aut-config.md`.**
-> That file is the single source of truth for the application URL, credentials, selector strategy, and known behaviours. Use those values everywhere in this prompt. Do not hardcode URLs or credentials.
->
-> **File path substitution**: This prompt uses `ecom-checkout` as the default app slug in all file names. Read the actual `appSlug` and `userStoryFile` from `util/prompts/aut-config.md` Section 0 and substitute them everywhere before proceeding.
-
 **Part** : 1 of 5 | **Agent** : Playwright MCP Server | **Step covered** : Step 1
 
 ---
@@ -47,29 +42,6 @@
 
 ---
 
-## Pre-flight: Environment Setup
-
-Before generating any test cases, ensure the project environment is ready. Run these commands once in the terminal:
-
-```bash
-# 1. Install all npm dependencies (@playwright/test, playwright-bdd, TypeScript types, etc.)
-npm install
-
-# 2. Download Playwright browsers and OS-level dependencies
-npx playwright install --with-deps
-
-# 3. Verify Playwright is working
-npx playwright --version
-```
-
-Check that the following exist — do NOT delete them, they configure the AI tooling:
-- `.env` — API keys for the MCP server tools
-- `.playwright-mcp/` — MCP server configuration folder
-
-If any tool call fails during test generation, re-run `npm install` and `npx playwright install --with-deps` before retrying.
-
----
-
 ## STEP 1 — Derive Manual Test Cases from the User Story
 
 ### 1.1 Input
@@ -107,12 +79,7 @@ Fail Criteria    : <what constitutes a fail — any assertion breaks or unexpect
 
 ### 1.3 Required test case categories
 
-> **Check `util/prompts/aut-config.md` Section 6 BEFORE generating test cases.**
->
-> - If `mode: full` → derive ALL test cases from the user story, covering every category below.
-> - If `mode: demo` → derive ONLY the 5 scenarios listed in Section 6 "UI Tests — 5 scenarios". Stop after those 5. Do not generate additional cases.
-
-When `mode: full`, you MUST produce at least one test case for each of the following categories:
+You MUST produce at least one test case for each of the following categories:
 
 | Category | Description |
 |---|---|
@@ -122,16 +89,6 @@ When `mode: full`, you MUST produce at least one test case for each of the follo
 | Edge Case / Boundary | Minimum/maximum length values, single-character inputs, numeric limits |
 | Navigation Flow | Back button, Cancel button, direct URL access, mid-flow navigation |
 | UI Element Validation | Labels, placeholders, buttons, error banners, visual confirmations |
-
-When `mode: demo`, produce ONLY these 5 test cases (one per row, in this order):
-
-| # | Category | Scenario |
-|---|---|---|
-| 1 | Happy Path | Complete checkout end-to-end |
-| 2 | Negative | Submit form with all fields empty |
-| 3 | Edge Case | Cart with exactly one product |
-| 4 | Navigation | Back to home after completing order |
-| 5 | UI Validation | Verify all cart page UI elements are visible |
 
 ### 1.4 Save Location
 

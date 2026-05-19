@@ -33,6 +33,9 @@ export class AuthService extends BaseApiClient {
    */
   async getToken(response: APIResponse): Promise<string> {
     const body = await this.getJsonResponse(response);
+    if (!body.token) {
+      throw new Error(`Authentication failed: ${JSON.stringify(body)}`);
+    }
     return body.token;
   }
 

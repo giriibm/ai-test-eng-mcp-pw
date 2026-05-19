@@ -1,10 +1,5 @@
 # E2E QA Prompt — Part 3 of 5: Exploratory Testing
 
-> **Before starting: read `util/prompts/aut-config.md`.**
-> That file is the single source of truth for the application URL, credentials, selector strategy, and known behaviours. Use those values everywhere in this prompt. Do not hardcode URLs or credentials.
->
-> **File path substitution**: This prompt uses `ecom-checkout` as the default app slug in all file names. Read the actual `appSlug` from `util/prompts/aut-config.md` Section 0 and substitute it everywhere before proceeding.
-
 **Part** : 3 of 5 | **Agent** : Playwright MCP Server | **Step covered** : Step 3
 
 ---
@@ -57,8 +52,8 @@ Exploratory testing uncovers defects, usability issues, and unexpected behaviour
 
 ### 3.2 Pre-conditions
 
-1. The application at the URL defined in `util/prompts/aut-config.md` Section 1 is reachable.
-2. Credentials available: read from `util/prompts/aut-config.md` Section 1 (UI credentials).
+1. The application at `https://www.saucedemo.com` is reachable.
+2. Credentials available: username `standard_user` / password `secret_sauce`.
 3. Parts 1 and 2 are complete — use `util/manual-tests/manual-test-cases.md` and `util/manual-tests/ecom-checkout-test-plan.md` as a reference map, but intentionally go **beyond** the scripted paths.
 
 ### 3.3 Exploratory Testing Charter
@@ -82,7 +77,7 @@ Execute the following steps in order for each charter:
 
 **Phase A — Setup**
 1. Open a fresh browser context (no cookies, no local storage).
-2. Navigate to the UI base URL from `util/prompts/aut-config.md` Section 1.
+2. Navigate to `https://www.saucedemo.com`.
 3. Take a baseline screenshot and label it `EX-<charter>-baseline`.
 
 **Phase B — Explore**
