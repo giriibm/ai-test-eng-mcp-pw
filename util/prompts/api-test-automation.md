@@ -209,7 +209,7 @@ generateFutureDates(daysFromNow, duration): { checkin, checkout }
 
 ### Playwright Config
 
-If `playwright.config.ts` was already created by the UI pipeline (Part 4), verify it contains an `API-Tests` project. If not, add it — or create the full config using the template in `util/prompts/e2e-qa-prompt-part4.md` Step 3.5 as the base.
+If `playwright.config.ts` was already created by the UI pipeline (Part 4), verify it contains an `API-Tests` project. If not, add it — or create the full config using the template in `util/prompts/ui-step4-test-generation.md` Step 3.5 as the base.
 
 The minimum required addition is:
 

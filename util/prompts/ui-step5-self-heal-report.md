@@ -13,11 +13,11 @@
 
 | Part | File | Agent | Steps | Focus |
 |---|---|---|---|---|
-| Part 1 | `e2e-qa-prompt-part1.md` | Playwright MCP Server | Step 1 | Derive manual test cases from user story |
-| Part 2 | `e2e-qa-prompt-part2.md` | Playwright Test Planner | Step 2 | Build structured E2E test plan |
-| Part 3 | `e2e-qa-prompt-part3.md` | Playwright MCP Server | Step 3 | Exploratory testing + bug reports |
-| Part 4 | `e2e-qa-prompt-part4.md` | playwright-test-generator | Steps 4–5 | Test data JSON + POM automation scripts |
-| **Part 5 — this file** | `e2e-qa-prompt-part5.md` | playwright-test-healer | Steps 6–7 | Test healing + final test report |
+| Part 1 | `ui-step1-manual-test-cases.md` | Playwright MCP Server | Step 1 | Derive manual test cases from user story |
+| Part 2 | `ui-step2-test-plan.md` | Playwright Test Planner | Step 2 | Build structured E2E test plan |
+| Part 3 | `ui-step3-exploratory-testing.md` | Playwright MCP Server | Step 3 | Exploratory testing + bug reports |
+| Part 4 | `ui-step4-test-generation.md` | playwright-test-generator | Steps 4–5 | Test data JSON + POM automation scripts |
+| **Part 5 — this file** | `ui-step5-self-heal-report.md` | playwright-test-healer | Steps 6–7 | Test healing + final test report |
 
 **This is the final part. Ensure all previous parts are complete before proceeding.**
 

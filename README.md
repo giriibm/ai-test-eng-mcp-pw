@@ -7,6 +7,50 @@ A comprehensive AI-driven QA automation framework featuring **57 automated tests
 
 ---
 
+## Quick Start — How to Kick Off the Agent
+
+> `aut-config.md` is a **config file you edit in the editor**, not a prompt you run in an agent.
+
+### Step 1 — Configure (editor only, no agent)
+
+> **New machine / first-time setup?** Before editing `aut-config.md`, run `util/prompts/00-setup-environment.md` in the default Copilot agent first. It installs dependencies, downloads browsers, creates `.env` and `.vscode/mcp.json`, and verifies everything is ready.
+
+Open `util/prompts/aut-config.md` and check two things:
+
+| Section | What to set |
+|---|---|
+| Section 0 | `appSlug` and `userStoryFile` — already set for the demo app, change only if switching AUT |
+| Section 6 | `mode: demo` for a quick 11-test suite, `mode: full` for all 57 tests |
+
+Sections 1–5 are pre-filled for the demo apps (SauceDemo UI + Restful-Booker API). Leave them as-is unless you are targeting a different application.
+
+### Step 2 — Open the prompt in VS Code Copilot Chat
+
+Pick the pipeline you want to run and open its prompt file in the correct agent:
+
+| Pipeline | Prompt file | Agent to use |
+|---|---|---|
+| API (standalone, fastest) | `util/prompts/api-test-automation.md` | Default Copilot agent |
+| BDD Smoke (standalone) | `util/prompts/bdd-smoke-test-automation.md` | Default Copilot agent |
+| UI — Step 1 | `util/prompts/ui-step1-manual-test-cases.md` | Playwright MCP Server agent |
+| UI — Step 2 | `util/prompts/ui-step2-test-plan.md` | Playwright Test Planner agent |
+| UI — Step 3 | `util/prompts/ui-step3-exploratory-testing.md` | Playwright MCP Server agent |
+| UI — Step 4 | `util/prompts/ui-step4-test-generation.md` | playwright-test-generator agent |
+| UI — Step 5 | `util/prompts/ui-step5-self-heal-report.md` | playwright-test-healer agent |
+
+### Step 3 — Paste the prompt and let the agent run
+
+Each prompt starts with a **Pre-flight** step that runs `npm install` and `npx playwright install --with-deps` automatically — you do not need to run anything manually beforehand.
+
+The agent will:
+1. Read `aut-config.md` for all URLs, credentials, and scope
+2. Generate the files
+3. Run the tests
+4. Triage and self-heal any failures
+5. Save a timestamped report to `reports/runs/`
+
+---
+
 ## How It Works
 
 ### UI Testing Pipeline
@@ -277,10 +321,63 @@ Implement automated tests organised by functionality:
 
 ---
 
+## One-Time Machine Setup
+
+> **This is now automated.** Open `util/prompts/00-setup-environment.md` in the default Copilot agent and it will run all the steps below for you.
+> The manual steps are documented here for reference only.
+
+### 1. Install Node.js 18+
+Download from [nodejs.org](https://nodejs.org) or use a version manager:
+```bash
+# macOS with nvm
+nvm install 18
+nvm use 18
+
+# Verify
+node --version   # must be v18 or higher
+npm --version
+```
+
+### 2. Install VS Code Extensions
+Install these two extensions in VS Code:
+
+| Extension | Purpose |
+|---|---|
+| **GitHub Copilot Chat** | Runs the AI agents that execute the prompt files |
+| **Playwright MCP** (`ms-playwright.playwright`) | Gives the UI agent browser control for live selector verification and exploratory testing |
+
+### 3. Configure the Playwright MCP Server
+Create the MCP config folder and file that the UI agent needs:
+```bash
+mkdir -p .playwright-mcp
+```
+Then in VS Code settings (or `.vscode/mcp.json`), register the Playwright MCP server. Refer to the [Playwright MCP docs](https://github.com/microsoft/playwright-mcp) for the exact config block.
+
+### 4. Create the `.env` file
+The `.env` file stores your API key for the MCP server tools. Create it in the workspace root:
+```bash
+# .env  (never commit this file — it is in .gitignore)
+ANTHROPIC_API_KEY=your-key-here   # or OPENAI_API_KEY= depending on your provider
+```
+
+> Without `.env` and `.playwright-mcp/`, the Playwright MCP Server agent cannot control the browser and the UI pipeline will fail at Step 1.
+
+### 5. Verify everything is ready
+```bash
+node --version          # v18+
+npx playwright --version  # will install if not present
+```
+
+Once these four steps are done, you never need to repeat them. All subsequent test generation is handled by the prompts.
+
+---
+
 ## Prerequisites
 
 - Node.js 18+
 - npm
+- VS Code with GitHub Copilot Chat extension
+- Playwright MCP extension (for UI pipeline only)
 
 ## Setup
 

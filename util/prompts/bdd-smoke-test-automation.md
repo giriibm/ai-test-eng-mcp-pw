@@ -217,7 +217,7 @@ export default defineConfig({
 });
 ```
 
-> If creating from scratch (no existing config), use the full template in `util/prompts/e2e-qa-prompt-part4.md` Step 3.5 as the base.
+> If creating from scratch (no existing config), use the full template in `util/prompts/ui-step4-test-generation.md` Step 3.5 as the base.
 
 ### Step 3: Add npm script
 Add to `package.json`:

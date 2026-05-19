@@ -2,7 +2,9 @@
 
 > **This is the single source of truth for all prompt files.**
 > To test a different application, update only this file.
-> All 7 prompt files (e2e-qa-prompt-part1 through part5, api-test-automation-prompt, bdd-test-automation-prompt) read this file first and use these values for every URL, credential, file path, and scope decision.
+> All 7 prompt files (ui-step1-manual-test-cases through ui-step5-self-heal-report, api-test-automation, bdd-smoke-test-automation) read this file first and use these values for every URL, credential, file path, and scope decision.
+>
+> **New machine?** Run `util/prompts/00-setup-environment.md` in the default Copilot agent first.
 
 ---
 
@@ -183,7 +185,7 @@ When `mode: demo`, each prompt generates only the scenarios below.
 | 4 | Navigation | Back to home / inventory after completing order |
 | 5 | UI Validation | Verify all cart page UI elements are visible |
 
-#### API Tests — 3 spec files (api-test-automation-prompt)
+#### API Tests — 3 spec files (api-test-automation)
 
 | # | Spec file | Tests inside |
 |---|---|---|
