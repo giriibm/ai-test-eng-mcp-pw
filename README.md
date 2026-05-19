@@ -1,4 +1,4 @@
-# AI QA Agent — Playwright Test Automation Suite
+# AI QA E2E Agent — Playwright Test Automation Suite
 
 A comprehensive AI-driven QA automation framework featuring **57 automated tests** (or **11 tests** in demo mode — see [Generation Mode](#generation-mode)):
 - **UI Testing**: E2E test pipeline that reads user stories, generates manual test cases, builds structured test plans, performs exploratory testing, and produces self-healing Page Object Model (POM) test suites (17 tests)
